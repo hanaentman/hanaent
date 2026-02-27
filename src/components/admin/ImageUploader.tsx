@@ -63,7 +63,7 @@ export default function ImageManager({ clinicId, images }: { clinicId: string; i
         <h3 className="text-sm font-medium mb-2">대표 이미지</h3>
         {heroImage ? (
           <div className="relative inline-block">
-            <img src={heroImage.url} alt="대표 이미지" className="h-40 rounded-lg object-cover" />
+            <img src={heroImage.url} alt="대표 이미지" className="max-h-40 rounded-lg object-contain bg-gray-50" />
             <button
               onClick={() => handleDelete(heroImage.id)}
               className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-700"
@@ -91,7 +91,7 @@ export default function ImageManager({ clinicId, images }: { clinicId: string; i
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {galleryImages.map(img => (
             <div key={img.id} className="relative group">
-              <img src={img.url} alt="갤러리" className="aspect-video rounded-lg object-cover w-full" />
+              <img src={img.url} alt="갤러리" className="aspect-video rounded-lg object-contain bg-gray-50 w-full" />
               <button
                 onClick={() => handleDelete(img.id)}
                 className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity"

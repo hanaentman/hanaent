@@ -14,9 +14,9 @@ interface ClinicCardProps {
 export default function ClinicCard({ slug, name, region, address, phone, tags, heroImage, doctorCount }: ClinicCardProps) {
   return (
     <Link href={`/clinics/${slug}`} className="card hover:shadow-md transition-shadow group block">
-      <div className="h-36 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center overflow-hidden">
+      <div className="h-36 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
         {heroImage ? (
-          <img src={heroImage} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <img src={heroImage} alt={name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
         ) : (
           <span className="text-3xl font-bold text-primary-300">H</span>
         )}

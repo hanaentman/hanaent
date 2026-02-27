@@ -48,7 +48,7 @@ export default async function ClinicDetailPage({ params }: PageProps) {
       {/* 히어로 */}
       <div className="h-64 md:h-80 bg-gradient-to-br from-primary-600 to-primary-800 relative overflow-hidden">
         {heroImage ? (
-          <img src={heroImage.url} alt={clinic.name} className="w-full h-full object-cover opacity-80" />
+          <img src={heroImage.url} alt={clinic.name} className="w-full h-full object-contain opacity-80" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-8xl font-bold text-white/20">H</span>

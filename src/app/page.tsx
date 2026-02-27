@@ -47,9 +47,9 @@ export default async function HomePage() {
               href={`/clinics/${clinic.slug}`}
               className="card hover:shadow-md transition-shadow group"
             >
-              <div className="h-40 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+              <div className="h-40 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
                 {clinic.images[0] ? (
-                  <img src={clinic.images[0].url} alt={clinic.name} className="w-full h-full object-cover" />
+                  <img src={clinic.images[0].url} alt={clinic.name} className="w-full h-full object-contain" />
                 ) : (
                   <span className="text-4xl font-bold text-primary-300">H</span>
                 )}
