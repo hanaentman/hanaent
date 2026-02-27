@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Clinic {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  region    String
+  address   String
+  phone     String
+  intro     String   @default("")
+  tags      String   @default("[]") // JSON array
+  hours     String   @default("{}") // JSON object
+  transport String   @default("")
+  parking   String   @default("")
+  mapUrl    String   @default("")
+  lat       Float?
+  lng       Float?
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  doctors    Doctor[]
+  images     ClinicImage[]
+  adminUsers AdminUser[]
+}
+
+model Doctor {
+  id          String   @id @default(cuid())
+  clinicId    String
+  name        String
+  title       String   @default("")
+  specialties String   @default("[]") // JSON array
+  bio         String   @default("")
+  photoUrl    String   @default("")
+  sortOrder   Int      @default(0)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  clinic Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+}
+
+model ClinicImage {
+  id        String   @id @default(cuid())
+  clinicId  String
+  url       String
+  type      String   @default("GALLERY") // "HERO" | "GALLERY"
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  clinic Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  passwordHash String
+  role         String    @default("CLINIC_ADMIN") // "SUPER_ADMIN" | "CLINIC_ADMIN"
+  clinicId     String?
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+
+  clinic Clinic? @relation(fields: [clinicId], references: [id], onDelete: SetNull)
+}

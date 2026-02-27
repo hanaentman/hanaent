@@ -1,0 +1,99 @@
+'use client';
+
+import Link from 'next/link';
+import { useState } from 'react';
+import SearchBar from './SearchBar';
+
+export default function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
+  return (
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* 로고 */}
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">H</span>
+            </div>
+            <span className="font-bold text-lg text-gray-900 hidden sm:block">
+              하나이비인후과
+            </span>
+          </Link>
+
+          {/* 데스크톱 검색 */}
+          <div className="hidden md:block flex-1 max-w-md mx-8">
+            <SearchBar />
+          </div>
+
+          {/* 네비게이션 */}
+          <nav className="hidden md:flex items-center gap-6">
+            <Link href="/clinics" className="text-gray-600 hover:text-primary-600 font-medium">
+              지점 찾기
+            </Link>
+            <Link href="/admin/login" className="text-gray-500 hover:text-gray-700 text-sm">
+              관리자
+            </Link>
+          </nav>
+
+          {/* 모바일 버튼 */}
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              onClick={() => setMobileSearchOpen(true)}
+              className="p-2 text-gray-600 hover:text-primary-600"
+              aria-label="검색"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-gray-600"
+              aria-label="메뉴"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'} />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* 모바일 메뉴 */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t py-3">
+            <Link href="/clinics" className="block py-2 text-gray-600 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
+              지점 찾기
+            </Link>
+            <Link href="/admin/login" className="block py-2 text-gray-500 hover:text-gray-700 text-sm" onClick={() => setMobileMenuOpen(false)}>
+              관리자 로그인
+            </Link>
+          </div>
+        )}
+      </div>
+
+      {/* 모바일 풀스크린 검색 오버레이 */}
+      {mobileSearchOpen && (
+        <div className="fixed inset-0 bg-white z-[60] md:hidden">
+          <div className="p-4">
+            <div className="flex items-center gap-3 mb-4">
+              <button
+                onClick={() => setMobileSearchOpen(false)}
+                className="p-2 text-gray-600"
+                aria-label="닫기"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+              </button>
+              <div className="flex-1">
+                <SearchBar autoFocus onNavigate={() => setMobileSearchOpen(false)} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}

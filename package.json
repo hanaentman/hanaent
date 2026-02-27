@@ -1,0 +1,38 @@
+{
+  "name": "hana-ent",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev --name init",
+    "db:seed": "npx tsx prisma/seed.ts",
+    "db:reset": "prisma migrate reset --force",
+    "setup": "npm run db:generate && npm run db:migrate && npm run db:seed"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "@types/node": "^25.3.2",
+    "@types/react": "^19.2.14",
+    "autoprefixer": "^10.4.27",
+    "bcryptjs": "^3.0.3",
+    "next": "^14.2.35",
+    "next-auth": "^4.24.13",
+    "postcss": "^8.5.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "eslint": "^9.39.3",
+    "eslint-config-next": "^16.1.6",
+    "prisma": "^5.22.0",
+    "tsx": "^4.21.0"
+  }
+}
