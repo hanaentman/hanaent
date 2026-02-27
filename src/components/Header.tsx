@@ -14,9 +14,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* 로고 */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">H</span>
-            </div>
+            <img src="/logo.jpg" alt="하나이비인후과 로고" className="w-9 h-9 rounded-full object-contain" />
             <span className="font-bold text-lg text-gray-900 hidden sm:block">
               하나이비인후과
             </span>

@@ -10,3 +10,4 @@ public/uploads/*
 .vercel
 .env*.local
 *.jpg
+!public/logo.jpg
