@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import prisma from '@/lib/prisma';
 import DoctorCard from '@/components/public/DoctorCard';
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: { slug: string };
 }

@@ -4,6 +4,8 @@ import ClinicCard from '@/components/public/ClinicCard';
 import FiltersBar from '@/components/public/FiltersBar';
 import { Suspense } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: '지점 찾기',
   description: '하나이비인후과병원 전국 42개 지점을 찾아보세요.',
