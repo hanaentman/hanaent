@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { externalUrl } from './url';
 
 export const clinicSchema = z.object({
   name: z.string().min(1, '지점명을 입력해주세요.'),
@@ -12,6 +13,8 @@ export const clinicSchema = z.object({
   transport: z.string().optional().default(''),
   parking: z.string().optional().default(''),
   mapUrl: z.string().optional().default(''),
+  websiteUrl: z.string().optional().default('').transform(externalUrl),
+  blogUrl: z.string().optional().default('').transform(externalUrl),
   lat: z.number().optional().nullable(),
   lng: z.number().optional().nullable(),
 });

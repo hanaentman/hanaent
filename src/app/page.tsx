@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
+import { parseSido } from '@/lib/address';
+import { SITE_URL } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,10 +17,10 @@ const NODES = [
 ];
 
 export default async function HomePage() {
-  const [clinicCount, doctorCount, regionGroups, recentClinics] = await Promise.all([
+  const [clinicCount, doctorCount, allAddresses, recentClinics] = await Promise.all([
     prisma.clinic.count(),
     prisma.doctor.count(),
-    prisma.clinic.groupBy({ by: ['region'] }),
+    prisma.clinic.findMany({ select: { address: true } }),
     prisma.clinic.findMany({
       take: 6,
       orderBy: { updatedAt: 'desc' },
@@ -29,11 +31,12 @@ export default async function HomePage() {
     }),
   ]);
 
-  const regionCount = regionGroups.length;
+  // 주소 기반 실제 시/도 개수 (지점찾기 필터와 동일 기준)
+  const sidoCount = new Set(allAddresses.map(c => parseSido(c.address))).size;
 
   const stats = [
     { value: clinicCount, unit: '개', label: '전국 지점' },
-    { value: regionCount, unit: '개', label: '진료 권역' },
+    { value: sidoCount, unit: '개', label: '진료 지역(시·도)' },
     { value: doctorCount, unit: '명', label: '전문 의료진' },
   ];
 
@@ -243,7 +246,7 @@ export default async function HomePage() {
             '@type': 'MedicalOrganization',
             name: '하나이비인후과네트워크',
             description: `전국 ${clinicCount}개 지점의 이비인후과 전문 네트워크`,
-            url: process.env.NEXTAUTH_URL || 'https://hana-ent.co.kr',
+            url: SITE_URL,
             medicalSpecialty: 'Otolaryngology',
           }),
         }}

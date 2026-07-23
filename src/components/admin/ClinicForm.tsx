@@ -16,6 +16,8 @@ interface Clinic {
   transport: string;
   parking: string;
   mapUrl: string;
+  websiteUrl: string;
+  blogUrl: string;
   lat: number | null;
   lng: number | null;
 }
@@ -36,6 +38,8 @@ export default function ClinicEditForm({ clinic }: { clinic: Clinic | null }) {
     transport: clinic?.transport || '',
     parking: clinic?.parking || '',
     mapUrl: clinic?.mapUrl || '',
+    websiteUrl: clinic?.websiteUrl || '',
+    blogUrl: clinic?.blogUrl || '',
     lat: clinic?.lat?.toString() || '',
     lng: clinic?.lng?.toString() || '',
   });
@@ -159,6 +163,19 @@ export default function ClinicEditForm({ clinic }: { clinic: Clinic | null }) {
         <div>
           <label className="block text-sm font-medium mb-1">경도</label>
           <input className="input-field" value={form.lng} onChange={e => update('lng', e.target.value)} placeholder="126.9780" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium mb-1">공식 홈페이지 링크</label>
+          <input className="input-field" value={form.websiteUrl} onChange={e => update('websiteUrl', e.target.value)} placeholder="https://example.com" />
+          <p className="text-xs text-gray-400 mt-1">지점 홈페이지 주소 (입력 시 지점 카드·상세에 '홈페이지' 버튼 표시)</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">블로그 링크</label>
+          <input className="input-field" value={form.blogUrl} onChange={e => update('blogUrl', e.target.value)} placeholder="https://blog.naver.com/..." />
+          <p className="text-xs text-gray-400 mt-1">지점 블로그 주소 (입력 시 '블로그' 버튼 표시)</p>
         </div>
       </div>
 

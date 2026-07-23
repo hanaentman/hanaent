@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/prisma';
 import DoctorCard from '@/components/public/DoctorCard';
+import { externalUrl } from '@/lib/url';
 
 export const dynamic = 'force-dynamic';
 
@@ -219,12 +220,32 @@ export default async function ClinicDetailPage({ params }: PageProps) {
                 </a>
                 {clinic.mapUrl && (
                   <a
-                    href={clinic.mapUrl}
+                    href={externalUrl(clinic.mapUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-secondary w-full block text-center"
                   >
                     지도에서 보기
+                  </a>
+                )}
+                {clinic.websiteUrl && (
+                  <a
+                    href={externalUrl(clinic.websiteUrl)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full block text-center rounded-lg border border-primary-200 bg-primary-50 px-4 py-2 font-medium text-primary-700 hover:bg-primary-100 transition-colors"
+                  >
+                    공식 홈페이지 방문
+                  </a>
+                )}
+                {clinic.blogUrl && (
+                  <a
+                    href={externalUrl(clinic.blogUrl)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full block text-center rounded-lg border border-green-200 bg-green-50 px-4 py-2 font-medium text-green-700 hover:bg-green-100 transition-colors"
+                  >
+                    블로그 보기
                   </a>
                 )}
               </div>

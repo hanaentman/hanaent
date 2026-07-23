@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/site';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://hana-ent.co.kr';
+  const baseUrl = SITE_URL;
   return {
     rules: [
       {

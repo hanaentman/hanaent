@@ -20,9 +20,11 @@ model Clinic {
   hours     String   @default("{}") // JSON object
   transport String   @default("")
   parking   String   @default("")
-  mapUrl    String   @default("")
-  lat       Float?
-  lng       Float?
+  mapUrl     String   @default("")
+  websiteUrl String   @default("") // 지점 공식 홈페이지 URL
+  blogUrl    String   @default("") // 지점 블로그 URL
+  lat        Float?
+  lng        Float?
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 

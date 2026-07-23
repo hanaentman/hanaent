@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next';
 import prisma from '@/lib/prisma';
+import { SITE_URL } from '@/lib/site';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://hana-ent.co.kr';
+  const baseUrl = SITE_URL;
 
   const clinics = await prisma.clinic.findMany({
     select: { slug: true, updatedAt: true },
