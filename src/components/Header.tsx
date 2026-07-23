@@ -30,7 +30,7 @@ export default function Header() {
             <Link href="/clinics" className="text-gray-600 hover:text-primary-600 font-medium">
               지점 찾기
             </Link>
-            <Link href="/admin/login" className="text-gray-500 hover:text-gray-700 text-sm">
+            <Link href="/admin" className="text-gray-500 hover:text-gray-700 text-sm">
               관리자
             </Link>
           </nav>
@@ -64,8 +64,8 @@ export default function Header() {
             <Link href="/clinics" className="block py-2 text-gray-600 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
               지점 찾기
             </Link>
-            <Link href="/admin/login" className="block py-2 text-gray-500 hover:text-gray-700 text-sm" onClick={() => setMobileMenuOpen(false)}>
-              관리자 로그인
+            <Link href="/admin" className="block py-2 text-gray-500 hover:text-gray-700 text-sm" onClick={() => setMobileMenuOpen(false)}>
+              관리자
             </Link>
           </div>
         )}
