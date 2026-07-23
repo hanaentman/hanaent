@@ -32,7 +32,7 @@ export default function ClinicEditForm({ clinic }: { clinic: Clinic | null }) {
     phone: clinic?.phone || '',
     intro: clinic?.intro || '',
     tags: (() => { try { return JSON.parse(clinic?.tags || '[]').join(', '); } catch { return ''; } })(),
-    hours: clinic?.hours || '{}',
+    hours: (clinic?.hours && clinic.hours !== '{}') ? clinic.hours : '',
     transport: clinic?.transport || '',
     parking: clinic?.parking || '',
     mapUrl: clinic?.mapUrl || '',
@@ -131,8 +131,9 @@ export default function ClinicEditForm({ clinic }: { clinic: Clinic | null }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">진료시간 (JSON)</label>
-        <textarea className="input-field font-mono text-sm" rows={4} value={form.hours} onChange={e => update('hours', e.target.value)} placeholder='{"월~금": "09:00 - 18:00", "토": "09:00 - 13:00"}' />
+        <label className="block text-sm font-medium mb-1">진료시간</label>
+        <textarea className="input-field text-sm" rows={4} value={form.hours} onChange={e => update('hours', e.target.value)} placeholder={'예) 월~금 09:00~18:00\n토 09:00~13:00\n일/공휴일 휴진'} />
+        <p className="text-xs text-gray-400 mt-1">자유롭게 입력하시면 입력한 그대로 표시됩니다. (여러 줄 입력 가능)</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

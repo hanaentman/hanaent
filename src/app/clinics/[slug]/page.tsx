@@ -35,8 +35,16 @@ export default async function ClinicDetailPage({ params }: PageProps) {
 
   if (!clinic) notFound();
 
-  let hours: Record<string, string> = {};
-  try { hours = JSON.parse(clinic.hours); } catch {}
+  // 진료시간: JSON 객체면 항목별로, 아니면 자유 텍스트를 그대로 표시
+  const hoursRaw = (clinic.hours || '').trim();
+  let hours: Record<string, string> | null = null;
+  try {
+    const parsed = JSON.parse(hoursRaw);
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && Object.keys(parsed).length > 0) {
+      hours = parsed as Record<string, string>;
+    }
+  } catch {}
+  const hasHours = hours !== null || (hoursRaw !== '' && hoursRaw !== '{}');
   let tags: string[] = [];
   try { tags = JSON.parse(clinic.tags); } catch {}
 
@@ -158,16 +166,18 @@ export default async function ClinicDetailPage({ params }: PageProps) {
                 </div>
 
                 {/* 진료시간 */}
-                {Object.keys(hours).length > 0 && (
+                {hasHours && (
                   <div className="flex gap-2">
                     <svg className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
                       <p className="font-medium">진료시간</p>
-                      {Object.entries(hours).map(([day, time]) => (
-                        <p key={day} className="text-gray-600">{day}: {time}</p>
-                      ))}
+                      {hours
+                        ? Object.entries(hours).map(([day, time]) => (
+                            <p key={day} className="text-gray-600">{day}: {time}</p>
+                          ))
+                        : <p className="text-gray-600 whitespace-pre-line">{hoursRaw}</p>}
                     </div>
                   </div>
                 )}
