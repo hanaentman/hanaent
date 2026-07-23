@@ -15,9 +15,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: clinic.name,
-    description: `${clinic.name} - ${clinic.address}. ${clinic.intro || '하나이비인후과병원'}`,
+    description: `${clinic.name} - ${clinic.address}. ${clinic.intro || '하나이비인후과네트워크'}`,
     openGraph: {
-      title: `${clinic.name} | 하나이비인후과병원`,
+      title: `${clinic.name} | 하나이비인후과네트워크`,
       description: `${clinic.address} · ${clinic.phone}`,
       type: 'website',
     },
@@ -258,7 +258,7 @@ export default async function ClinicDetailPage({ params }: PageProps) {
             medicalSpecialty: 'Otolaryngology',
             parentOrganization: {
               '@type': 'MedicalOrganization',
-              name: '하나이비인후과병원',
+              name: '하나이비인후과네트워크',
             },
           }),
         }}

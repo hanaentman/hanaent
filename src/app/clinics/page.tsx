@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: '지점 찾기',
-  description: '하나이비인후과병원 전국 42개 지점을 찾아보세요.',
+  description: '하나이비인후과네트워크 전국 지점을 찾아보세요.',
 };
 
 interface PageProps {

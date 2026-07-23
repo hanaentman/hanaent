@@ -6,9 +6,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="font-bold text-lg mb-3">하나이비인후과병원</h3>
+            <h3 className="font-bold text-lg mb-3">하나이비인후과네트워크</h3>
             <p className="text-gray-600 text-sm">
-              전국 42개 지점에서 이비인후과 전문 진료를 제공합니다.
+              전국 지점에서 이비인후과 전문 진료를 제공합니다.
             </p>
           </div>
           <div>
@@ -27,7 +27,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} 하나이비인후과병원. All rights reserved.
+          &copy; {new Date().getFullYear()} 하나이비인후과네트워크. All rights reserved.
         </div>
       </div>
     </footer>

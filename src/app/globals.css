@@ -25,3 +25,44 @@
     @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden;
   }
 }
+
+/* ===== 3D 네트워크 히어로 연출 ===== */
+@keyframes float-y {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50%      { transform: translate(-50%, -50%) translateY(-12px); }
+}
+@keyframes float-y-lg {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50%      { transform: translate(-50%, -50%) translateY(-20px); }
+}
+@keyframes hub-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%      { transform: translate(-50%, -50%) scale(1.03); }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes dash-flow {
+  to { stroke-dashoffset: -100; }
+}
+
+.node-float   { animation: float-y 6s ease-in-out infinite; }
+.node-float-lg{ animation: float-y-lg 8s ease-in-out infinite; }
+.hub-pulse    { animation: hub-pulse 5s ease-in-out infinite; }
+.spin-slow    { animation: spin-slow 60s linear infinite; }
+.line-flow    { stroke-dasharray: 4 6; animation: dash-flow 3s linear infinite; }
+
+/* 카드 3D 리프트 */
+.lift-3d {
+  transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;
+  will-change: transform;
+}
+.lift-3d:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px -12px rgba(30, 64, 175, .28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node-float, .node-float-lg, .hub-pulse, .spin-slow, .line-flow { animation: none !important; }
+}

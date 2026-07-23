@@ -45,7 +45,7 @@ export default function AdminLoginPage() {
             <span className="text-white font-bold text-2xl">H</span>
           </div>
           <h1 className="text-2xl font-bold">관리자 로그인</h1>
-          <p className="text-sm text-gray-500 mt-1">하나이비인후과병원 관리 시스템</p>
+          <p className="text-sm text-gray-500 mt-1">하나이비인후과네트워크 관리 시스템</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
