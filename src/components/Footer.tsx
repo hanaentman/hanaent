@@ -8,13 +8,13 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-lg mb-3">하나이비인후과네트워크</h3>
             <p className="text-gray-600 text-sm">
-              전국 지점에서 이비인후과 전문 진료를 제공합니다.
+              전국 병·의원에서 이비인후과 전문 진료를 제공합니다.
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-3">바로가기</h4>
             <ul className="space-y-2 text-sm text-gray-600">
-              <li><Link href="/clinics" className="hover:text-primary-600">지점 찾기</Link></li>
+              <li><Link href="/clinics" className="hover:text-primary-600">지역으로 찾기</Link></li>
               <li><Link href="/search" className="hover:text-primary-600">통합 검색</Link></li>
             </ul>
           </div>

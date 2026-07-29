@@ -8,8 +8,8 @@ import { Suspense } from 'react';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: '지점 찾기',
-  description: '하나이비인후과네트워크 전국 지점을 내 지역에서 찾아보세요.',
+  title: '지역으로 찾기',
+  description: '하나이비인후과네트워크 전국 병·의원을 내 지역에서 찾아보세요.',
 };
 
 interface PageProps {
@@ -71,7 +71,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">지점 찾기</h1>
+        <h1 className="text-3xl font-bold">지역으로 찾기</h1>
         <p className="mt-2 text-gray-500">내가 사는 지역을 선택하면 가까운 하나이비인후과를 찾아드립니다.</p>
       </div>
 
@@ -84,13 +84,13 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
       <div className="mt-6 mb-4 flex items-center justify-between">
         <p className="text-sm text-gray-500">
           {sido ? <><span className="font-semibold text-gray-700">{sido}{gu ? ` ${gu}` : ''}</span> · </> : ''}
-          총 <span className="font-semibold text-gray-700">{clinics.length}</span>개 지점
+          총 <span className="font-semibold text-gray-700">{clinics.length}</span>개 병·의원
         </p>
       </div>
 
       {clinics.length === 0 ? (
         <div className="text-center py-16 text-gray-500">
-          <p className="text-lg">해당 지역에 아직 지점이 없습니다.</p>
+          <p className="text-lg">해당 지역에 아직 병·의원이 없습니다.</p>
           <p className="text-sm mt-2">다른 지역을 선택하거나 전체 목록에서 찾아보세요.</p>
         </div>
       ) : (

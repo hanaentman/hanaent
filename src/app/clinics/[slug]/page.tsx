@@ -12,7 +12,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const clinic = await prisma.clinic.findUnique({ where: { slug: params.slug } });
-  if (!clinic) return { title: '지점을 찾을 수 없습니다' };
+  if (!clinic) return { title: '병·의원을 찾을 수 없습니다' };
 
   return {
     title: clinic.name,

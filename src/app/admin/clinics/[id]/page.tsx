@@ -5,6 +5,7 @@ import AdminLayoutWrapper from '@/components/admin/AdminLayout';
 import ClinicEditForm from '@/components/admin/ClinicForm';
 import DoctorManager from '@/components/admin/DoctorForm';
 import ImageManager from '@/components/admin/ImageUploader';
+import ClinicDeleteButton from '@/components/admin/ClinicDeleteButton';
 
 interface PageProps {
   params: { id: string };
@@ -55,6 +56,12 @@ export default async function EditClinicPage({ params }: PageProps) {
         <section className="card p-6">
           <h2 className="text-lg font-bold mb-4">사진 관리</h2>
           <ImageManager clinicId={clinic.id} images={clinic.images} />
+        </section>
+
+        <section className="card p-6 border-red-200">
+          <h2 className="text-lg font-bold mb-1 text-red-600">지점 삭제</h2>
+          <p className="text-sm text-gray-500 mb-4">삭제하면 이 지점과 소속 의료진·사진이 모두 삭제되며 되돌릴 수 없습니다.</p>
+          <ClinicDeleteButton id={clinic.id} name={clinic.name} />
         </section>
       </div>
     </AdminLayoutWrapper>

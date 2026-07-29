@@ -20,7 +20,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold mb-4">통합 검색</h1>
         <p className="text-gray-500">검색어를 입력해주세요.</p>
-        <p className="text-sm text-gray-400 mt-2">지점명, 주소, 의료진명, 전문분야 등으로 검색할 수 있습니다.</p>
+        <p className="text-sm text-gray-400 mt-2">병·의원명, 주소, 의료진명, 전문분야 등으로 검색할 수 있습니다.</p>
       </div>
     );
   }
@@ -40,19 +40,19 @@ export default async function SearchPage({ searchParams }: PageProps) {
           <p className="text-lg text-gray-500">&apos;{query}&apos;에 대한 검색 결과가 없습니다.</p>
           <p className="text-sm text-gray-400 mt-2">다른 검색어를 입력해보세요.</p>
           <div className="mt-6">
-            <Link href="/clinics" className="btn-primary inline-block">전체 지점 보기</Link>
+            <Link href="/clinics" className="btn-primary inline-block">전체 병·의원 보기</Link>
           </div>
         </div>
       ) : (
         <div className="space-y-8">
-          {/* 지점 결과 */}
+          {/* 병·의원 결과 */}
           {results.clinics.length > 0 && (
             <section>
               <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
                 <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5" />
                 </svg>
-                지점 ({results.clinics.length})
+                병·의원 ({results.clinics.length})
               </h2>
               <div className="space-y-3">
                 {results.clinics.map(clinic => (

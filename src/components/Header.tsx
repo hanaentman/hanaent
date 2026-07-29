@@ -28,7 +28,7 @@ export default function Header() {
           {/* 네비게이션 */}
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/clinics" className="text-gray-600 hover:text-primary-600 font-medium">
-              지점 찾기
+              지역으로 찾기
             </Link>
             <Link href="/admin" className="text-gray-500 hover:text-gray-700 text-sm">
               관리자
@@ -62,7 +62,7 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t py-3">
             <Link href="/clinics" className="block py-2 text-gray-600 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
-              지점 찾기
+              지역으로 찾기
             </Link>
             <Link href="/admin" className="block py-2 text-gray-500 hover:text-gray-700 text-sm" onClick={() => setMobileMenuOpen(false)}>
               관리자

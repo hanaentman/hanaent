@@ -35,7 +35,7 @@ export default async function HomePage() {
   const sidoCount = new Set(allAddresses.map(c => parseSido(c.address))).size;
 
   const stats = [
-    { value: clinicCount, unit: '개', label: '전국 지점' },
+    { value: clinicCount, unit: '개', label: '전국 병·의원' },
     { value: sidoCount, unit: '개', label: '진료 지역(시·도)' },
     { value: doctorCount, unit: '명', label: '전문 의료진' },
   ];
@@ -55,21 +55,21 @@ export default async function HomePage() {
           <div className="text-center lg:text-left">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-1.5 text-sm font-medium text-primary-100 ring-1 ring-white/20">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              전국 {clinicCount}개 지점, 하나로 연결
+              전국 {clinicCount}개 병·의원, 하나로 연결
             </span>
             <h1 className="mt-6 text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1]">
               하나이비인후과<br className="hidden md:block" />
               <span className="bg-gradient-to-r from-white to-primary-200 bg-clip-text text-transparent">네트워크</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-primary-100/90 max-w-xl mx-auto lg:mx-0">
-              전국 {clinicCount}개 지점이 하나의 네트워크로 이어집니다.<br />
-              어느 지점에서나 동일한 기준의 이비인후과 전문 진료를 만나보세요.
+              전국 {clinicCount}개 병·의원이 하나의 네트워크로 이어집니다.<br />
+              어느 병·의원에서나 동일한 기준의 이비인후과 전문 진료를 만나보세요.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <Link href="/clinics"
                 className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3.5 text-lg font-bold text-primary-700 shadow-lg shadow-primary-900/30 transition hover:-translate-y-0.5 hover:shadow-xl">
-                지점 찾기
+                지역으로 찾기
               </Link>
               <Link href="/search"
                 className="inline-flex items-center justify-center rounded-full bg-white/10 px-8 py-3.5 text-lg font-semibold text-white ring-1 ring-white/25 backdrop-blur transition hover:bg-white/20">
@@ -153,7 +153,7 @@ export default async function HomePage() {
           {[
             {
               title: '전국 통합 네트워크',
-              desc: `전국 ${clinicCount}개 지점이 동일한 진료 기준과 시스템으로 연결되어 있습니다.`,
+              desc: `전국 ${clinicCount}개 병·의원이 동일한 진료 기준과 시스템으로 연결되어 있습니다.`,
               d: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z',
               grad: 'from-primary-500 to-primary-700',
             },
@@ -165,7 +165,7 @@ export default async function HomePage() {
             },
             {
               title: '어디서나 높은 수준의 진료',
-              desc: '가까운 지점 어디를 방문하셔도 높은 수준의 전문 진료를 받으실 수 있습니다.',
+              desc: '가까운 병·의원 어디를 방문하셔도 높은 수준의 전문 진료를 받으실 수 있습니다.',
               d: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
               grad: 'from-indigo-500 to-primary-700',
             },
@@ -183,12 +183,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ===== 지점 안내 ===== */}
+      {/* ===== 병·의원 안내 ===== */}
       <section className="bg-gray-50 py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold">지점 안내</h2>
+              <h2 className="text-2xl md:text-3xl font-bold">병·의원 안내</h2>
               <p className="mt-2 text-gray-500 text-sm">하나이비인후과네트워크 병·의원을 안내합니다.</p>
             </div>
             <Link href="/clinics" className="hidden sm:inline-flex items-center gap-1 text-primary-600 font-semibold hover:gap-2 transition-all">
@@ -245,7 +245,7 @@ export default async function HomePage() {
             '@context': 'https://schema.org',
             '@type': 'MedicalOrganization',
             name: '하나이비인후과네트워크',
-            description: `전국 ${clinicCount}개 지점의 이비인후과 전문 네트워크`,
+            description: `전국 ${clinicCount}개 병·의원의 이비인후과 전문 네트워크`,
             url: SITE_URL,
             medicalSpecialty: 'Otolaryngology',
           }),

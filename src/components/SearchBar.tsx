@@ -140,7 +140,7 @@ export default function SearchBar({ autoFocus = false, onNavigate }: SearchBarPr
           onChange={e => setQuery(e.target.value)}
           onFocus={() => { if (results && query.trim()) setIsOpen(true); }}
           onKeyDown={handleKeyDown}
-          placeholder="지점, 의료진, 전문분야 검색..."
+          placeholder="병·의원, 의료진, 전문분야 검색..."
           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50"
           role="combobox"
           aria-expanded={isOpen}
@@ -170,7 +170,7 @@ export default function SearchBar({ autoFocus = false, onNavigate }: SearchBarPr
             <>
               {results && results.clinics.length > 0 && (
                 <div>
-                  <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 bg-gray-50">지점</div>
+                  <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 bg-gray-50">병·의원</div>
                   {results.clinics.map((clinic, i) => (
                     <button
                       key={clinic.id}
