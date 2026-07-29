@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { getSessionUser, canAccessClinic } from '@/lib/rbac';
+import { getSessionUser, canAccessClinic, isSuperAdmin } from '@/lib/rbac';
 import { clinicUpdateSchema } from '@/lib/validators';
 
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
@@ -25,10 +25,16 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ error: parsed.error.errors[0]?.message }, { status: 400 });
   }
 
+  const data = { ...parsed.data };
+  // 노출 순서는 전체 관리자만 변경 가능 (지점 관리자는 기존 값 유지)
+  if (!isSuperAdmin(user)) {
+    delete data.sortOrder;
+  }
+
   try {
     const clinic = await prisma.clinic.update({
       where: { id: params.id },
-      data: parsed.data,
+      data,
     });
     return NextResponse.json(clinic);
   } catch {

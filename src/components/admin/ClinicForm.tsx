@@ -23,7 +23,7 @@ interface Clinic {
   lng: number | null;
 }
 
-export default function ClinicEditForm({ clinic }: { clinic: Clinic | null }) {
+export default function ClinicEditForm({ clinic, canEditSortOrder = false }: { clinic: Clinic | null; canEditSortOrder?: boolean }) {
   const router = useRouter();
   const isNew = !clinic;
 
@@ -182,11 +182,13 @@ export default function ClinicEditForm({ clinic }: { clinic: Clinic | null }) {
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1">노출 순서</label>
-        <input className="input-field w-32" type="number" value={form.sortOrder} onChange={e => update('sortOrder', e.target.value)} />
-        <p className="text-xs text-gray-400 mt-1">메인 '지점 안내'에 노출되는 순서 (숫자가 작을수록 먼저 표시)</p>
-      </div>
+      {canEditSortOrder && (
+        <div>
+          <label className="block text-sm font-medium mb-1">노출 순서</label>
+          <input className="input-field w-32" type="number" value={form.sortOrder} onChange={e => update('sortOrder', e.target.value)} />
+          <p className="text-xs text-gray-400 mt-1">메인 '지점 안내'에 노출되는 순서 (숫자가 작을수록 먼저 표시) · 전체 관리자 전용</p>
+        </div>
+      )}
 
       <div className="flex justify-end">
         <button type="submit" disabled={loading} className="btn-primary">

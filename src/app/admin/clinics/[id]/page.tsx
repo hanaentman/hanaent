@@ -44,7 +44,7 @@ export default async function EditClinicPage({ params }: PageProps) {
       <div className="space-y-8">
         <section className="card p-6">
           <h2 className="text-lg font-bold mb-4">기본 정보</h2>
-          <ClinicEditForm clinic={clinic} />
+          <ClinicEditForm clinic={clinic} canEditSortOrder />
         </section>
 
         <section className="card p-6">
