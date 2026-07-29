@@ -23,6 +23,7 @@ model Clinic {
   mapUrl     String   @default("")
   websiteUrl String   @default("") // 지점 공식 홈페이지 URL
   blogUrl    String   @default("") // 지점 블로그 URL
+  sortOrder  Int      @default(0)  // 지점 안내 노출 정렬 순서 (작을수록 먼저)
   lat        Float?
   lng        Float?
   updatedAt DateTime @updatedAt

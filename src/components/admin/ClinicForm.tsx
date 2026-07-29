@@ -18,6 +18,7 @@ interface Clinic {
   mapUrl: string;
   websiteUrl: string;
   blogUrl: string;
+  sortOrder: number;
   lat: number | null;
   lng: number | null;
 }
@@ -40,6 +41,7 @@ export default function ClinicEditForm({ clinic }: { clinic: Clinic | null }) {
     mapUrl: clinic?.mapUrl || '',
     websiteUrl: clinic?.websiteUrl || '',
     blogUrl: clinic?.blogUrl || '',
+    sortOrder: clinic?.sortOrder?.toString() || '0',
     lat: clinic?.lat?.toString() || '',
     lng: clinic?.lng?.toString() || '',
   });
@@ -58,6 +60,7 @@ export default function ClinicEditForm({ clinic }: { clinic: Clinic | null }) {
     const body = {
       ...form,
       tags,
+      sortOrder: parseInt(form.sortOrder) || 0,
       lat: form.lat ? parseFloat(form.lat) : null,
       lng: form.lng ? parseFloat(form.lng) : null,
     };
@@ -177,6 +180,12 @@ export default function ClinicEditForm({ clinic }: { clinic: Clinic | null }) {
           <input className="input-field" value={form.blogUrl} onChange={e => update('blogUrl', e.target.value)} placeholder="https://blog.naver.com/..." />
           <p className="text-xs text-gray-400 mt-1">지점 블로그 주소 (입력 시 '블로그' 버튼 표시)</p>
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1">노출 순서</label>
+        <input className="input-field w-32" type="number" value={form.sortOrder} onChange={e => update('sortOrder', e.target.value)} />
+        <p className="text-xs text-gray-400 mt-1">메인 '지점 안내'에 노출되는 순서 (숫자가 작을수록 먼저 표시)</p>
       </div>
 
       <div className="flex justify-end">

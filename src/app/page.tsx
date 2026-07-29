@@ -23,7 +23,7 @@ export default async function HomePage() {
     prisma.clinic.findMany({ select: { address: true } }),
     prisma.clinic.findMany({
       take: 6,
-      orderBy: { updatedAt: 'desc' },
+      orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
       include: {
         images: { where: { type: 'HERO' }, take: 1 },
         _count: { select: { doctors: true } },
@@ -143,7 +143,7 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 py-16 md:py-20">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-sm font-bold uppercase tracking-widest text-primary-600">Integrated Care</p>
-          <h2 className="mt-2 text-2xl md:text-3xl font-bold">지점은 여럿, 진료 기준은 하나</h2>
+          <h2 className="mt-2 text-2xl md:text-3xl font-bold">병·의원, 진료 기준은 하나</h2>
           <p className="mt-3 text-gray-500">
             흩어진 개별 병원이 아니라, 하나의 기준으로 운영되는 통합 네트워크입니다.
           </p>
@@ -159,13 +159,13 @@ export default async function HomePage() {
             },
             {
               title: '전문 의료진',
-              desc: `${doctorCount}명의 이비인후과 전문의가 각 지점에서 직접 진료합니다.`,
+              desc: '이비인후과 전문의가 병·의원에서 직접 진료합니다.',
               d: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
               grad: 'from-sky-500 to-primary-600',
             },
             {
-              title: '어디서나 균일한 진료',
-              desc: '가까운 지점 어디를 방문하셔도 동일한 수준의 전문 진료를 받으실 수 있습니다.',
+              title: '어디서나 높은 수준의 진료',
+              desc: '가까운 지점 어디를 방문하셔도 높은 수준의 전문 진료를 받으실 수 있습니다.',
               d: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
               grad: 'from-indigo-500 to-primary-700',
             },
@@ -189,7 +189,7 @@ export default async function HomePage() {
           <div className="flex items-end justify-between mb-8">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold">지점 안내</h2>
-              <p className="mt-2 text-gray-500 text-sm">최근 업데이트된 지점을 먼저 보여드립니다.</p>
+              <p className="mt-2 text-gray-500 text-sm">하나이비인후과네트워크 병·의원을 안내합니다.</p>
             </div>
             <Link href="/clinics" className="hidden sm:inline-flex items-center gap-1 text-primary-600 font-semibold hover:gap-2 transition-all">
               전체 보기
@@ -230,7 +230,7 @@ export default async function HomePage() {
             <div className="text-center mt-10">
               <Link href="/clinics"
                 className="inline-flex items-center justify-center rounded-full bg-primary-600 px-8 py-3 font-bold text-white shadow-lg shadow-primary-600/30 transition hover:-translate-y-0.5 hover:bg-primary-700">
-                전체 {clinicCount}개 지점 보기
+                전체 {clinicCount}개 네트워크 보기
               </Link>
             </div>
           )}

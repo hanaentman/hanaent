@@ -15,6 +15,7 @@ export const clinicSchema = z.object({
   mapUrl: z.string().optional().default(''),
   websiteUrl: z.string().optional().default('').transform(externalUrl),
   blogUrl: z.string().optional().default('').transform(externalUrl),
+  sortOrder: z.number().optional().default(0),
   lat: z.number().optional().nullable(),
   lng: z.number().optional().nullable(),
 });
