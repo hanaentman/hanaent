@@ -38,8 +38,9 @@ export default function AdminLoginPage() {
     if (result?.error) {
       setError('아이디 또는 비밀번호가 올바르지 않습니다.');
     } else {
-      router.push('/admin');
-      router.refresh();
+      // 하드 내비게이션: 새로 발급된 세션 쿠키가 실린 요청으로 대시보드에 진입
+      // (router.push 소프트 내비게이션은 미들웨어가 새 쿠키를 못 읽어 로그인으로 튕기는 레이스 발생)
+      window.location.href = '/admin';
     }
   };
 
