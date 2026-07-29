@@ -8,22 +8,22 @@ import { Suspense } from 'react';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: '지역으로 찾기',
+  title: '가까운곳 찾기',
   description: '하나이비인후과네트워크 전국 병·의원을 내 지역에서 찾아보세요.',
 };
 
 interface PageProps {
-  searchParams: { sido?: string; gu?: string; sort?: string; q?: string };
+  searchParams: { region?: string; sido?: string; gu?: string; sort?: string; q?: string };
 }
 
 export default async function ClinicsPage({ searchParams }: PageProps) {
-  const { sido = '', gu = '', sort = 'name', q = '' } = searchParams;
+  const { region = '', sido = '', gu = '', sort = 'name', q = '' } = searchParams;
 
   const orderBy: any = sort === 'updated'
     ? { updatedAt: 'desc' }
     : { name: 'asc' };
 
-  // 43개 규모라 전체를 받아 메모리에서 지역(주소 기반) 필터링
+  // 42개 규모라 전체를 받아 메모리에서 지역(주소 기반) 필터링
   const all = await prisma.clinic.findMany({
     orderBy,
     include: {
@@ -39,9 +39,12 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
     _gu: parseGu(c.address),
   }));
 
-  // 시/도 목록 + 카운트
+  // 권역(region) 1차 필터 — 메인 히어로의 지역 노드 클릭 시 사용
+  const base = region ? enriched.filter(c => c.region === region) : enriched;
+
+  // 시/도 목록 + 카운트 (권역 필터 반영)
   const sidoCount = new Map<string, number>();
-  for (const c of enriched) sidoCount.set(c._sido, (sidoCount.get(c._sido) || 0) + 1);
+  for (const c of base) sidoCount.set(c._sido, (sidoCount.get(c._sido) || 0) + 1);
   const sidoList = [...sidoCount.entries()]
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => sortSido(a.name, b.name));
@@ -49,7 +52,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
   // 선택된 시/도 내 구 목록 + 카운트
   const guCount = new Map<string, number>();
   if (sido) {
-    for (const c of enriched) {
+    for (const c of base) {
       if (c._sido === sido) guCount.set(c._gu, (guCount.get(c._gu) || 0) + 1);
     }
   }
@@ -58,7 +61,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
     .sort((a, b) => a.name.localeCompare(b.name, 'ko'));
 
   // 실제 필터 적용
-  const clinics = enriched.filter(c => {
+  const clinics = base.filter(c => {
     if (sido && c._sido !== sido) return false;
     if (gu && c._gu !== gu) return false;
     if (q) {
@@ -71,7 +74,9 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">지역으로 찾기</h1>
+        <h1 className="text-3xl font-bold">
+          가까운곳 찾기{region ? <span className="text-primary-600"> · {region}</span> : ''}
+        </h1>
         <p className="mt-2 text-gray-500">내가 사는 지역을 선택하면 가까운 하나이비인후과를 찾아드립니다.</p>
       </div>
 
@@ -81,11 +86,15 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
         </Suspense>
       </div>
 
-      <div className="mt-6 mb-4 flex items-center justify-between">
+      <div className="mt-6 mb-4 flex items-center justify-between gap-3">
         <p className="text-sm text-gray-500">
+          {region ? <><span className="font-semibold text-gray-700">{region}</span> · </> : ''}
           {sido ? <><span className="font-semibold text-gray-700">{sido}{gu ? ` ${gu}` : ''}</span> · </> : ''}
           총 <span className="font-semibold text-gray-700">{clinics.length}</span>개 병·의원
         </p>
+        {region && (
+          <a href="/clinics" className="text-sm font-medium text-primary-600 hover:underline whitespace-nowrap">전체 지역 보기</a>
+        )}
       </div>
 
       {clinics.length === 0 ? (

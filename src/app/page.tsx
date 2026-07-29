@@ -6,20 +6,18 @@ import { SITE_URL } from '@/lib/site';
 export const dynamic = 'force-dynamic';
 
 // 3D 히어로에 뿌릴 지역 노드 좌표(퍼센트) — 중앙 허브(50,50)로 연결됨
+// label 은 DB clinic.region 값과 일치해야 클릭 시 해당 지역 목록으로 이동함
 const NODES = [
   { label: '서울', x: 16, y: 20, size: 'lg' },
-  { label: '경기', x: 84, y: 16, size: 'md' },
-  { label: '영남', x: 88, y: 66, size: 'md' },
-  { label: '충청', x: 58, y: 90, size: 'sm' },
-  { label: '호남', x: 12, y: 72, size: 'md' },
-  { label: '전문의', x: 82, y: 42, size: 'sm' },
-  { label: '24시 안내', x: 26, y: 46, size: 'sm' },
+  { label: '경기', x: 84, y: 18, size: 'md' },
+  { label: '영남', x: 88, y: 64, size: 'md' },
+  { label: '충청', x: 56, y: 90, size: 'md' },
+  { label: '호남', x: 12, y: 70, size: 'md' },
 ];
 
 export default async function HomePage() {
-  const [clinicCount, doctorCount, allAddresses, recentClinics] = await Promise.all([
+  const [clinicCount, allAddresses, recentClinics] = await Promise.all([
     prisma.clinic.count(),
-    prisma.doctor.count(),
     prisma.clinic.findMany({ select: { address: true } }),
     prisma.clinic.findMany({
       take: 6,
@@ -37,7 +35,6 @@ export default async function HomePage() {
   const stats = [
     { value: clinicCount, unit: '개', label: '전국 병·의원' },
     { value: sidoCount, unit: '개', label: '진료 지역(시·도)' },
-    { value: doctorCount, unit: '명', label: '전문 의료진' },
   ];
 
   return (
@@ -57,28 +54,24 @@ export default async function HomePage() {
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
               전국 {clinicCount}개 병·의원, 하나로 연결
             </span>
-            <h1 className="mt-6 text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1]">
-              하나이비인후과<br className="hidden md:block" />
+            <h1 className="mt-6 text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.1] md:whitespace-nowrap">
+              하나이비인후과{' '}
               <span className="bg-gradient-to-r from-white to-primary-200 bg-clip-text text-transparent">네트워크</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-primary-100/90 max-w-xl mx-auto lg:mx-0">
-              전국 {clinicCount}개 병·의원이 하나의 네트워크로 이어집니다.<br />
-              어느 병·의원에서나 동일한 기준의 이비인후과 전문 진료를 만나보세요.
+              전국 {clinicCount}개, 하나의 네트워크로 이어집니다.<br />
+              어느 곳에서나 동일한 기준의 이비인후과 전문 진료를 만나보세요.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <Link href="/clinics"
                 className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3.5 text-lg font-bold text-primary-700 shadow-lg shadow-primary-900/30 transition hover:-translate-y-0.5 hover:shadow-xl">
-                지역으로 찾기
-              </Link>
-              <Link href="/search"
-                className="inline-flex items-center justify-center rounded-full bg-white/10 px-8 py-3.5 text-lg font-semibold text-white ring-1 ring-white/25 backdrop-blur transition hover:bg-white/20">
-                의료진 검색
+                가까운곳 찾기
               </Link>
             </div>
 
             {/* 통계 */}
-            <dl className="mt-12 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
+            <dl className="mt-12 grid grid-cols-2 gap-4 max-w-sm mx-auto lg:mx-0">
               {stats.map(s => (
                 <div key={s.label} className="rounded-2xl bg-white/10 backdrop-blur px-3 py-4 text-center ring-1 ring-white/15">
                   <dd className="text-2xl md:text-3xl font-extrabold">
@@ -113,18 +106,19 @@ export default async function HomePage() {
                 <span className="text-[11px] font-semibold text-gray-400">하나의 네트워크</span>
               </div>
 
-              {/* 지역/특징 노드 */}
+              {/* 지역 노드 (클릭 시 해당 지역 병·의원 목록으로 이동) */}
               {NODES.map((n, i) => {
                 const sizeCls = n.size === 'lg'
                   ? 'px-4 py-2 text-sm'
                   : n.size === 'md' ? 'px-3.5 py-1.5 text-sm' : 'px-3 py-1.5 text-xs';
                 return (
-                  <div key={n.label}
-                    className={`${i % 2 === 0 ? 'node-float' : 'node-float-lg'} absolute z-10 flex items-center gap-1.5 rounded-full bg-white/15 ${sizeCls} font-semibold text-white shadow-lg ring-1 ring-white/25 backdrop-blur`}
+                  <Link key={n.label} href={`/clinics?region=${encodeURIComponent(n.label)}`}
+                    aria-label={`${n.label} 지역 병·의원 보기`}
+                    className={`${i % 2 === 0 ? 'node-float' : 'node-float-lg'} absolute z-10 flex items-center gap-1.5 rounded-full bg-white/15 ${sizeCls} font-semibold text-white shadow-lg ring-1 ring-white/25 backdrop-blur cursor-pointer hover:bg-white/30 hover:ring-white/60 transition-colors`}
                     style={{ left: `${n.x}%`, top: `${n.y}%`, transform: 'translate(-50%, -50%)', animationDelay: `${i * 0.6}s` }}>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />
                     {n.label}
-                  </div>
+                  </Link>
                 );
               })}
             </div>

@@ -14,7 +14,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-3">바로가기</h4>
             <ul className="space-y-2 text-sm text-gray-600">
-              <li><Link href="/clinics" className="hover:text-primary-600">지역으로 찾기</Link></li>
+              <li><Link href="/clinics" className="hover:text-primary-600">가까운곳 찾기</Link></li>
               <li><Link href="/search" className="hover:text-primary-600">통합 검색</Link></li>
             </ul>
           </div>

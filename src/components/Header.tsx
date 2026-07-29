@@ -16,7 +16,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2">
             <img src="/logo.jpg" alt="하나이비인후과 로고" className="w-9 h-9 rounded-full object-contain" />
             <span className="font-bold text-lg text-gray-900 hidden sm:block">
-              하나이비인후과
+              하나이비인후과 네트워크
             </span>
           </Link>
 
@@ -28,7 +28,7 @@ export default function Header() {
           {/* 네비게이션 */}
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/clinics" className="text-gray-600 hover:text-primary-600 font-medium">
-              지역으로 찾기
+              가까운곳 찾기
             </Link>
             <Link href="/admin" className="text-gray-500 hover:text-gray-700 text-sm">
               관리자
@@ -62,7 +62,7 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t py-3">
             <Link href="/clinics" className="block py-2 text-gray-600 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
-              지역으로 찾기
+              가까운곳 찾기
             </Link>
             <Link href="/admin" className="block py-2 text-gray-500 hover:text-gray-700 text-sm" onClick={() => setMobileMenuOpen(false)}>
               관리자
