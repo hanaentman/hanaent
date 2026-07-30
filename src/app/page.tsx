@@ -1,19 +1,9 @@
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
-import { parseSido } from '@/lib/address';
+import { parseSido, sortSido } from '@/lib/address';
 import { SITE_URL } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
-
-// 3D 히어로에 뿌릴 지역 노드 좌표(퍼센트) — 중앙 허브(50,50)로 연결됨
-// label 은 DB clinic.region 값과 일치해야 클릭 시 해당 지역 목록으로 이동함
-const NODES = [
-  { label: '서울', x: 16, y: 20, size: 'lg' },
-  { label: '경기', x: 84, y: 18, size: 'md' },
-  { label: '영남', x: 88, y: 64, size: 'md' },
-  { label: '충청', x: 56, y: 90, size: 'md' },
-  { label: '호남', x: 12, y: 70, size: 'md' },
-];
 
 export default async function HomePage() {
   const [clinicCount, allAddresses, recentClinics] = await Promise.all([
@@ -29,8 +19,20 @@ export default async function HomePage() {
     }),
   ]);
 
-  // 주소 기반 실제 시/도 개수 (지점찾기 필터와 동일 기준)
-  const sidoCount = new Set(allAddresses.map(c => parseSido(c.address))).size;
+  // 주소 기반 실제 시/도 목록 (지점찾기 필터와 동일 기준)
+  const sidoNames = [...new Set(allAddresses.map(c => parseSido(c.address)))].sort(sortSido);
+  const sidoCount = sidoNames.length;
+
+  // 3D 히어로 노드: 실제 시/도를 중앙 허브 둘레 원형으로 배치 (클릭 시 해당 시/도 목록으로 이동)
+  const NODES = sidoNames.map((label, i) => {
+    const angle = (i / sidoNames.length) * Math.PI * 2 - Math.PI / 2; // 12시 방향부터 시계방향
+    const R = 44; // 반지름(%)
+    return {
+      label,
+      x: Math.round((50 + R * Math.cos(angle)) * 10) / 10,
+      y: Math.round((50 + R * Math.sin(angle)) * 10) / 10,
+    };
+  });
 
   const stats = [
     { value: clinicCount, unit: '개', label: '전국 병·의원' },
@@ -88,12 +90,12 @@ export default async function HomePage() {
           {/* 우: 3D 네트워크 비주얼 */}
           <div className="relative [perspective:1400px]">
             <div className="relative mx-auto w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[440px] md:h-[440px] [transform-style:preserve-3d] [transform:rotateX(14deg)_rotateZ(-8deg)]">
-              {/* 회전 궤도 링 */}
-              <div className="spin-slow absolute inset-6 rounded-full border border-white/15" />
-              <div className="spin-slow absolute inset-16 rounded-full border border-dashed border-white/15" style={{ animationDirection: 'reverse' }} />
+              {/* 회전 궤도 링 (장식 — 클릭 통과) */}
+              <div className="spin-slow pointer-events-none absolute inset-6 rounded-full border border-white/15" />
+              <div className="spin-slow pointer-events-none absolute inset-16 rounded-full border border-dashed border-white/15" style={{ animationDirection: 'reverse' }} />
 
-              {/* 연결선 (허브 → 노드) */}
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              {/* 연결선 (허브 → 노드, 클릭 통과) */}
+              <svg className="pointer-events-none absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                 {NODES.map(n => (
                   <line key={n.label} x1="50" y1="50" x2={n.x} y2={n.y}
                     stroke="rgba(255,255,255,0.35)" strokeWidth="0.4" className="line-flow" />
@@ -108,16 +110,13 @@ export default async function HomePage() {
                 <span className="text-[11px] font-semibold text-gray-400">하나의 네트워크</span>
               </div>
 
-              {/* 지역 노드 (클릭 시 해당 지역 병·의원 목록으로 이동) */}
+              {/* 시/도 노드 (클릭 시 해당 시·도 병·의원 목록으로 이동) */}
               {NODES.map((n, i) => {
-                const sizeCls = n.size === 'lg'
-                  ? 'px-4 py-2 text-sm'
-                  : n.size === 'md' ? 'px-3.5 py-1.5 text-sm' : 'px-3 py-1.5 text-xs';
                 return (
-                  <Link key={n.label} href={`/clinics?region=${encodeURIComponent(n.label)}`}
-                    aria-label={`${n.label} 지역 병·의원 보기`}
-                    className={`${i % 2 === 0 ? 'node-float' : 'node-float-lg'} absolute z-10 flex items-center gap-1.5 rounded-full bg-white/15 ${sizeCls} font-semibold text-white shadow-lg ring-1 ring-white/25 backdrop-blur cursor-pointer hover:bg-white/30 hover:ring-white/60 transition-colors`}
-                    style={{ left: `${n.x}%`, top: `${n.y}%`, transform: 'translate(-50%, -50%)', animationDelay: `${i * 0.6}s` }}>
+                  <Link key={n.label} href={`/clinics?sido=${encodeURIComponent(n.label)}`}
+                    aria-label={`${n.label} 병·의원 보기`}
+                    className={`${i % 2 === 0 ? 'node-float' : 'node-float-lg'} absolute z-30 flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-lg ring-1 ring-white/25 backdrop-blur cursor-pointer hover:bg-white/30 hover:ring-white/60 transition-colors`}
+                    style={{ left: `${n.x}%`, top: `${n.y}%`, transform: 'translate(-50%, -50%)', animationDelay: `${(i % 5) * 0.5}s` }}>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />
                     {n.label}
                   </Link>
