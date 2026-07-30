@@ -50,6 +50,9 @@ export default async function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 py-20 md:py-28 grid lg:grid-cols-2 gap-12 items-center">
           {/* 좌: 카피 */}
           <div className="text-center lg:text-left">
+            <div className="flex justify-center lg:justify-start mb-5">
+              <img src="/logo.jpg" alt="하나이비인후과 네트워크 로고" className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white object-contain shadow-xl ring-4 ring-white/25" />
+            </div>
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-1.5 text-sm font-medium text-primary-100 ring-1 ring-white/20">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
               전국 {clinicCount}개 병·의원, 하나로 연결
@@ -58,7 +61,7 @@ export default async function HomePage() {
               하나이비인후과{' '}
               <span className="bg-gradient-to-r from-white to-primary-200 bg-clip-text text-transparent">네트워크</span>
             </h1>
-            <p className="mt-6 text-lg md:text-xl text-primary-100/90 max-w-xl mx-auto lg:mx-0">
+            <p className="mt-6 text-lg md:text-xl text-primary-100/90 max-w-xl mx-auto lg:mx-0 break-keep">
               전국 {clinicCount}개, 하나의 네트워크로 이어집니다.<br />
               어느 곳에서나 동일한 기준의 이비인후과 전문 진료를 만나보세요.
             </p>
