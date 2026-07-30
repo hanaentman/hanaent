@@ -115,7 +115,7 @@ export default async function HomePage() {
                 return (
                   <Link key={n.label} href={`/clinics?sido=${encodeURIComponent(n.label)}`}
                     aria-label={`${n.label} 병·의원 보기`}
-                    className={`${i % 2 === 0 ? 'node-float' : 'node-float-lg'} absolute z-30 flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-lg ring-1 ring-white/25 backdrop-blur cursor-pointer hover:bg-white/30 hover:ring-white/60 transition-colors`}
+                    className={`${i % 2 === 0 ? 'node-float' : 'node-float-lg'} absolute z-30 flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white/15 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-lg ring-1 ring-white/25 backdrop-blur cursor-pointer hover:bg-white/30 hover:ring-white/60 transition-colors`}
                     style={{ left: `${n.x}%`, top: `${n.y}%`, transform: 'translate(-50%, -50%)', animationDelay: `${(i % 5) * 0.5}s` }}>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />
                     {n.label}
