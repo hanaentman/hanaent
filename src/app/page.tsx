@@ -50,7 +50,7 @@ export default async function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 py-20 md:py-28 grid lg:grid-cols-2 gap-12 items-center">
           {/* 좌: 카피 */}
           <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-5 text-center lg:text-left">
-            <img src="/logo.jpg" alt="하나이비인후과 네트워크 로고" className="w-16 h-16 md:w-20 md:h-20 flex-none rounded-full bg-white object-contain shadow-xl ring-4 ring-white/25 lg:mt-1" />
+            <img src="/logo.jpg" alt="하나이비인후과 네트워크 로고" className="w-16 h-16 md:w-20 md:h-20 flex-none rounded-full bg-white object-contain shadow-xl ring-4 ring-white/25 lg:mt-[28px]" />
             <div className="min-w-0 w-full">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-1.5 text-sm font-medium text-primary-100 ring-1 ring-white/20">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
