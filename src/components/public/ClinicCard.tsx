@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { externalUrl } from '@/lib/url';
 
 interface ClinicCardProps {
@@ -22,9 +23,9 @@ export default function ClinicCard({
   return (
     <div className="lift-3d rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden flex flex-col">
       <Link href={`/clinics/${slug}`} className="group block">
-        <div className="h-36 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
+        <div className="relative h-36 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
           {heroImage ? (
-            <img src={heroImage} alt={name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+            <Image src={heroImage} alt={name} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-contain group-hover:scale-105 transition-transform duration-300" />
           ) : (
             <span className="text-4xl font-black text-primary-200">H</span>
           )}

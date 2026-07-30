@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/prisma';
+import Image from 'next/image';
 import DoctorCard from '@/components/public/DoctorCard';
 import { externalUrl } from '@/lib/url';
 
@@ -57,7 +58,7 @@ export default async function ClinicDetailPage({ params }: PageProps) {
       {/* 히어로 */}
       <div className="h-64 md:h-80 bg-gradient-to-br from-primary-600 to-primary-800 relative overflow-hidden">
         {heroImage ? (
-          <img src={heroImage.url} alt={clinic.name} className="w-full h-full object-contain opacity-80" />
+          <Image src={heroImage.url} alt={clinic.name} fill priority sizes="100vw" className="object-contain opacity-80" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-8xl font-bold text-white/20">H</span>
@@ -129,8 +130,8 @@ export default async function ClinicDetailPage({ params }: PageProps) {
                 <h2 className="text-xl font-bold mb-4">시설 사진</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {galleryImages.map(img => (
-                    <div key={img.id} className="aspect-video rounded-lg overflow-hidden bg-gray-100">
-                      <img src={img.url} alt="시설 사진" className="w-full h-full object-cover" />
+                    <div key={img.id} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
+                      <Image src={img.url} alt="시설 사진" fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover" />
                     </div>
                   ))}
                 </div>

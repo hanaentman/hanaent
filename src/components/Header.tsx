@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import SearchBar from './SearchBar';
 
@@ -14,7 +15,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* 로고 */}
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.jpg" alt="하나이비인후과 로고" className="w-9 h-9 rounded-full object-contain" />
+            <Image src="/logo.jpg" alt="하나이비인후과 로고" width={40} height={40} className="w-9 h-9 rounded-full object-contain" />
             <span className="font-bold text-lg text-gray-900 hidden sm:block">
               하나이비인후과 네트워크
             </span>

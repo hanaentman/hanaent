@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import prisma from '@/lib/prisma';
 import { parseSido, sortSido } from '@/lib/address';
 import { SITE_URL } from '@/lib/site';
@@ -52,7 +53,7 @@ export default async function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 py-20 md:py-28 grid lg:grid-cols-2 gap-12 items-center">
           {/* 좌: 카피 */}
           <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-5 text-center lg:text-left">
-            <img src="/logo.jpg" alt="하나이비인후과 네트워크 로고" className="w-16 h-16 md:w-20 md:h-20 flex-none rounded-full bg-white object-contain shadow-xl ring-4 ring-white/25 lg:mt-[28px]" />
+            <Image src="/logo.jpg" alt="하나이비인후과 네트워크 로고" width={96} height={96} priority className="w-16 h-16 md:w-20 md:h-20 flex-none rounded-full bg-white object-contain shadow-xl ring-4 ring-white/25 lg:mt-[28px]" />
             <div className="min-w-0 w-full">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-1.5 text-sm font-medium text-primary-100 ring-1 ring-white/20">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -199,9 +200,9 @@ export default async function HomePage() {
                 href={`/clinics/${clinic.slug}`}
                 className="lift-3d group rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden"
               >
-                <div className="h-40 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
+                <div className="relative h-40 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
                   {clinic.images[0] ? (
-                    <img src={clinic.images[0].url} alt={clinic.name} className="w-full h-full object-contain" />
+                    <Image src={clinic.images[0].url} alt={clinic.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-contain" />
                   ) : (
                     <span className="text-5xl font-black text-primary-200 group-hover:text-primary-300 transition-colors">H</span>
                   )}

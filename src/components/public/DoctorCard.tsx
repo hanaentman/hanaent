@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 interface DoctorCardProps {
   name: string;
   title: string;
@@ -9,9 +11,9 @@ interface DoctorCardProps {
 export default function DoctorCard({ name, title, specialties, bio, photoUrl }: DoctorCardProps) {
   return (
     <div className="card p-4 flex gap-4">
-      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary-100 to-primary-200 flex-shrink-0 overflow-hidden flex items-center justify-center">
+      <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary-100 to-primary-200 flex-shrink-0 overflow-hidden flex items-center justify-center">
         {photoUrl ? (
-          <img src={photoUrl} alt={name} className="w-full h-full object-cover rounded-full" />
+          <Image src={photoUrl} alt={name} fill sizes="80px" className="object-cover rounded-full" />
         ) : (
           <svg className="w-8 h-8 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
