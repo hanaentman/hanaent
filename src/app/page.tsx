@@ -202,7 +202,10 @@ export default async function HomePage() {
               >
                 <div className="relative h-40 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
                   {clinic.images[0] ? (
-                    <Image src={clinic.images[0].url} alt={clinic.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover" />
+                    <>
+                      <Image src={clinic.images[0].url} alt="" aria-hidden fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover scale-110 blur-xl" />
+                      <Image src={clinic.images[0].url} alt={clinic.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-contain" />
+                    </>
                   ) : (
                     <span className="text-5xl font-black text-primary-200 group-hover:text-primary-300 transition-colors">H</span>
                   )}
