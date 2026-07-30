@@ -49,17 +49,16 @@ export default async function HomePage() {
 
         <div className="relative max-w-7xl mx-auto px-4 py-20 md:py-28 grid lg:grid-cols-2 gap-12 items-center">
           {/* 좌: 카피 */}
-          <div className="text-center lg:text-left">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-5 text-center lg:text-left">
+            <img src="/logo.jpg" alt="하나이비인후과 네트워크 로고" className="w-16 h-16 md:w-20 md:h-20 flex-none rounded-full bg-white object-contain shadow-xl ring-4 ring-white/25 lg:mt-1" />
+            <div className="min-w-0 w-full">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-1.5 text-sm font-medium text-primary-100 ring-1 ring-white/20">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
               전국 {clinicCount}개 병·의원, 하나로 연결
             </span>
-            <div className="mt-6 flex items-center gap-3 md:gap-4 justify-center lg:justify-start">
-              <img src="/logo.jpg" alt="하나이비인후과 네트워크 로고" className="w-14 h-14 md:w-20 md:h-20 flex-none rounded-full bg-white object-contain shadow-xl ring-4 ring-white/25" />
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.1] break-keep">
-                하나이비인후과 <span className="bg-gradient-to-r from-white to-primary-200 bg-clip-text text-transparent">네트워크</span>
-              </h1>
-            </div>
+            <h1 className="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.1] break-keep">
+              하나이비인후과 <span className="bg-gradient-to-r from-white to-primary-200 bg-clip-text text-transparent">네트워크</span>
+            </h1>
             <p className="mt-6 text-base md:text-lg text-primary-100/90 max-w-2xl mx-auto lg:mx-0 break-keep leading-relaxed">
               <span className="block">전국 {clinicCount}개, 하나의 네트워크로 이어집니다.</span>
               <span className="block">어느 곳에서나 동일한 기준의 이비인후과 전문 진료를 만나보세요.</span>
@@ -83,6 +82,7 @@ export default async function HomePage() {
                 </div>
               ))}
             </dl>
+            </div>
           </div>
 
           {/* 우: 3D 네트워크 비주얼 */}
