@@ -6,24 +6,24 @@ export default function Footer() {
     <footer className="bg-gray-50 border-t border-gray-200 mt-auto">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-              <Image
-                src="/logo.jpg"
-                alt="하나이비인후과 로고"
-                width={32}
-                height={32}
-                className="w-8 h-8 rounded-full object-contain"
-              />
-              하나이비인후과네트워크
-            </h3>
-            <p className="text-gray-600 text-sm">
-              전국 병·의원에서 이비인후과 전문 진료를 제공합니다.
-            </p>
-            <p className="mt-3 text-sm text-gray-600">
-              대표자: 김성준<br />
-              서울특별시 강남구 역삼로 247 홍진빌딩 3층
-            </p>
+          <div className="flex items-start gap-3">
+            <Image
+              src="/logo.jpg"
+              alt="하나이비인후과 네트워크 로고"
+              width={40}
+              height={40}
+              className="w-10 h-10 flex-none rounded-full object-contain"
+            />
+            <div>
+              <h3 className="font-bold text-lg">하나이비인후과 네트워크</h3>
+              <p className="mt-1 text-gray-600 text-sm">
+                전국 병·의원에서 이비인후과 전문 진료를 제공합니다.
+              </p>
+              <p className="mt-3 text-sm text-gray-600">
+                대표자: 김성준<br />
+                서울특별시 강남구 역삼로 247 홍진빌딩 3층
+              </p>
+            </div>
           </div>
           <div>
             <h4 className="font-semibold mb-3">바로가기</h4>
@@ -40,7 +40,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} 하나이비인후과네트워크. All rights reserved.
+          &copy; {new Date().getFullYear()} 하나이비인후과 네트워크. All rights reserved.
         </div>
       </div>
     </footer>
