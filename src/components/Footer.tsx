@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -6,9 +7,22 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="font-bold text-lg mb-3">하나이비인후과네트워크</h3>
+            <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+              <Image
+                src="/logo.jpg"
+                alt="하나이비인후과 로고"
+                width={32}
+                height={32}
+                className="w-8 h-8 rounded-full object-contain"
+              />
+              하나이비인후과네트워크
+            </h3>
             <p className="text-gray-600 text-sm">
               전국 병·의원에서 이비인후과 전문 진료를 제공합니다.
+            </p>
+            <p className="mt-3 text-sm text-gray-600">
+              대표자: 김성준<br />
+              서울특별시 강남구 역삼로 247 홍진빌딩 3층
             </p>
           </div>
           <div>
@@ -21,8 +35,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-3">고객센터</h4>
             <p className="text-sm text-gray-600">
-              대표전화: 1588-0000<br />
-              운영시간: 평일 09:00 - 18:00
+              대표전화: 070-7595-7894
             </p>
           </div>
         </div>
