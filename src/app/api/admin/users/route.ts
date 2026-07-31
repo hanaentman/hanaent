@@ -72,3 +72,26 @@ export async function PUT(req: NextRequest) {
   await prisma.adminUser.update({ where: { id }, data });
   return NextResponse.json({ success: true });
 }
+
+export async function DELETE(req: NextRequest) {
+  const user = await getSessionUser();
+  if (!user || !isSuperAdmin(user)) {
+    return NextResponse.json({ error: '권한이 없습니다.' }, { status: 403 });
+  }
+
+  const body = await req.json().catch(() => ({}));
+  const id = body.id || new URL(req.url).searchParams.get('id');
+  if (!id) return NextResponse.json({ error: 'ID가 필요합니다.' }, { status: 400 });
+
+  // 현재 로그인한 계정은 삭제 불가 (잠금 방지)
+  if (id === user.id) {
+    return NextResponse.json({ error: '현재 로그인한 계정은 삭제할 수 없습니다.' }, { status: 400 });
+  }
+
+  try {
+    await prisma.adminUser.delete({ where: { id } });
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json({ error: '계정 삭제에 실패했습니다.' }, { status: 500 });
+  }
+}

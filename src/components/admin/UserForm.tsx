@@ -19,7 +19,7 @@ interface ClinicOption {
   name: string;
 }
 
-export default function UserManager({ users, clinics }: { users: AdminUser[]; clinics: ClinicOption[] }) {
+export default function UserManager({ users, clinics, currentUserId }: { users: AdminUser[]; clinics: ClinicOption[]; currentUserId: string }) {
   const router = useRouter();
   const [showNew, setShowNew] = useState(false);
 
@@ -103,6 +103,23 @@ export default function UserManager({ users, clinics }: { users: AdminUser[]; cl
                     >
                       {u.isActive ? '비활성화' : '활성화'}
                     </button>
+                    {u.id !== currentUserId && (
+                      <button
+                        onClick={async () => {
+                          if (!confirm(`'${u.username}' 계정을 정말 삭제하시겠습니까?\n삭제하면 되돌릴 수 없습니다.`)) return;
+                          const res = await fetch('/api/admin/users', {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: u.id }),
+                          });
+                          if (res.ok) router.refresh();
+                          else { const d = await res.json().catch(() => ({})); alert(d.error || '삭제 실패'); }
+                        }}
+                        className="text-sm text-red-600 hover:underline font-medium"
+                      >
+                        삭제
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

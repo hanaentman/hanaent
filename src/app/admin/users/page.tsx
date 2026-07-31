@@ -23,7 +23,7 @@ export default async function UsersManagePage() {
   return (
     <AdminLayoutWrapper>
       <h1 className="text-2xl font-bold mb-6">계정 관리</h1>
-      <UserManager users={users} clinics={clinics} />
+      <UserManager users={users} clinics={clinics} currentUserId={user.id} />
     </AdminLayoutWrapper>
   );
 }
