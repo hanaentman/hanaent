@@ -6,23 +6,40 @@ import { SITE_URL } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
+// 시드 기반 결정적 셔플(Fisher-Yates + mulberry32) — 같은 시드면 항상 같은 순서
+function seededShuffle<T>(arr: T[], seed: number): T[] {
+  let a = seed >>> 0;
+  const rand = () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
 export default async function HomePage() {
-  const [clinicCount, allAddresses, recentClinics] = await Promise.all([
-    prisma.clinic.count(),
-    prisma.clinic.findMany({ select: { address: true } }),
-    prisma.clinic.findMany({
-      take: 6,
-      orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
-      include: {
-        images: { where: { type: 'HERO' }, take: 1 },
-        _count: { select: { doctors: true } },
-      },
-    }),
-  ]);
+  const allClinics = await prisma.clinic.findMany({
+    include: {
+      images: { where: { type: 'HERO' }, take: 1 },
+      _count: { select: { doctors: true } },
+    },
+  });
+
+  const clinicCount = allClinics.length;
 
   // 주소 기반 실제 시/도 목록 (지점찾기 필터와 동일 기준)
-  const sidoNames = [...new Set(allAddresses.map(c => parseSido(c.address)))].sort(sortSido);
+  const sidoNames = [...new Set(allClinics.map(c => parseSido(c.address)))].sort(sortSido);
   const sidoCount = sidoNames.length;
+
+  // '병·의원 안내' 6곳: 주간 시드 기반 랜덤 (같은 주엔 고정, 매주 교체)
+  const weekSeed = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
+  const recentClinics = seededShuffle(allClinics, weekSeed).slice(0, 6);
 
   // 3D 히어로 노드: 실제 시/도를 중앙 허브 둘레 원형으로 배치 (클릭 시 해당 시/도 목록으로 이동)
   const NODES = sidoNames.map((label, i) => {
