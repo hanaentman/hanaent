@@ -41,7 +41,7 @@ export default async function HomePage() {
   const weekSeed = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
   const recentClinics = seededShuffle(allClinics, weekSeed).slice(0, 6);
 
-  // 히어로 지도 노드: 각 시/도를 실제 지리적 위치(병원 평균 좌표)로 배치
+  // 히어로 지도: 시/도를 실제 지리 위치로 투영 + 뒤에 한국 지도 실루엣(같은 좌표계)
   const sidoGeo = new Map<string, { lat: number; lon: number; n: number }>();
   for (const c of allClinics) {
     if (c.lat == null || c.lng == null) continue;
@@ -50,17 +50,24 @@ export default async function HomePage() {
     g.lat += c.lat; g.lon += c.lng; g.n += 1;
     sidoGeo.set(s, g);
   }
-  const pts = [...sidoGeo.entries()].map(([label, g]) => ({ label, lat: g.lat / g.n, lon: g.lon / g.n }));
-  const lats = pts.map(p => p.lat);
-  const lons = pts.map(p => p.lon);
-  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
-  const minLon = Math.min(...lons), maxLon = Math.max(...lons);
-  const PAD = 12; // 가장자리 여백(%)
-  const NODES = pts.map(p => ({
-    label: p.label,
-    x: Math.round((PAD + ((p.lon - minLon) / ((maxLon - minLon) || 1)) * (100 - 2 * PAD)) * 10) / 10,
-    y: Math.round((PAD + ((maxLat - p.lat) / ((maxLat - minLat) || 1)) * (100 - 2 * PAD)) * 10) / 10, // 위도 반전(북쪽=위)
-  }));
+  // 남한 고정 지리 범위(노드·실루엣 공통 투영)
+  const LON0 = 125.7, LON1 = 129.9, LAT0 = 33.9, LAT1 = 38.7, MAP_PAD = 5;
+  const proj = (lon: number, lat: number) => ({
+    x: Math.round((MAP_PAD + ((lon - LON0) / (LON1 - LON0)) * (100 - 2 * MAP_PAD)) * 10) / 10,
+    y: Math.round((MAP_PAD + ((LAT1 - lat) / (LAT1 - LAT0)) * (100 - 2 * MAP_PAD)) * 10) / 10, // 북쪽=위
+  });
+  const NODES = [...sidoGeo.entries()].map(([label, g]) => ({ label, ...proj(g.lon / g.n, g.lat / g.n) }));
+
+  // 남한 본토 간이 외곽선(경도,위도) → 폴리곤 좌표
+  const KOREA_LL: [number, number][] = [
+    [126.6, 37.8], [126.9, 38.0], [127.3, 38.3], [128.1, 38.35], [128.36, 38.62],
+    [129.0, 37.6], [129.43, 36.9], [129.56, 35.9], [129.36, 35.35], [129.1, 35.1],
+    [128.7, 34.95], [128.4, 34.85], [127.9, 34.78], [127.75, 34.55], [127.4, 34.62],
+    [127.1, 34.45], [126.7, 34.35], [126.38, 34.4], [126.35, 34.8], [126.5, 35.3],
+    [126.5, 35.9], [126.7, 36.2], [126.15, 36.8], [126.62, 36.95], [126.78, 37.25],
+    [126.42, 37.5], [126.6, 37.8],
+  ];
+  const koreaPoints = KOREA_LL.map(([lon, lat]) => { const p = proj(lon, lat); return `${p.x},${p.y}`; }).join(' ');
 
   const stats = [
     { value: clinicCount, unit: '개', label: '전국 병·의원' },
@@ -117,13 +124,20 @@ export default async function HomePage() {
 
           {/* 우: 한국 지도형 네트워크 비주얼 — 시/도를 실제 지리 위치에 배치, 클릭 시 이동 */}
           <div className="relative">
-            <div className="relative mx-auto w-[300px] h-[320px] sm:w-[380px] sm:h-[405px] md:w-[440px] md:h-[470px]">
-              {/* 브랜드 배지 (좌상단, 장식) */}
-              <div className="pointer-events-none absolute left-1 top-1 z-10 rounded-2xl bg-white/95 px-4 py-3 text-center shadow-xl ring-1 ring-white/50">
-                <div className="text-3xl font-black leading-none text-primary-700">
-                  {clinicCount}<span className="align-top text-sm font-bold text-primary-500">개</span>
+            <div className="relative mx-auto w-[300px] h-[400px] sm:w-[360px] sm:h-[480px] md:w-[400px] md:h-[520px]">
+              {/* 한국 지도 실루엣 (장식, 클릭 통과) */}
+              <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <polygon points={koreaPoints}
+                  fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)"
+                  strokeWidth="0.6" strokeLinejoin="round" />
+              </svg>
+
+              {/* 브랜드 배지 (우상단 동해 쪽, 장식) */}
+              <div className="pointer-events-none absolute right-0 top-0 z-10 rounded-2xl bg-white/95 px-3.5 py-2.5 text-center shadow-xl ring-1 ring-white/50">
+                <div className="text-2xl font-black leading-none text-primary-700">
+                  {clinicCount}<span className="align-top text-xs font-bold text-primary-500">개</span>
                 </div>
-                <div className="mt-1 text-[10px] font-extrabold tracking-widest text-primary-500">ONE NETWORK</div>
+                <div className="mt-0.5 text-[9px] font-extrabold tracking-widest text-primary-500">ONE NETWORK</div>
               </div>
 
               {/* 시/도 노드 (지리적 위치) */}
