@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Nanum_Myeongjo } from 'next/font/google';
 import prisma from '@/lib/prisma';
+
+// 병원 신뢰감을 주는 명조(세리프) 서체 — 히어로 슬로건용
+const trustSerif = Nanum_Myeongjo({ subsets: ['latin'], weight: ['700', '800'], display: 'swap' });
 import { parseSido, sortSido } from '@/lib/address';
 import { SITE_URL } from '@/lib/site';
 import { KOREA_PROVINCES, projectKorea } from '@/lib/korea-map';
@@ -88,9 +92,11 @@ export default async function HomePage() {
             <h1 className="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.1] break-keep">
               하나이비인후과 <span className="bg-gradient-to-r from-white to-primary-200 bg-clip-text text-transparent">네트워크</span>
             </h1>
-            <p className="mt-6 text-base md:text-lg text-primary-100/90 max-w-2xl mx-auto lg:mx-0 break-keep leading-relaxed">
-              <span className="block">전국 {clinicCount}개, 하나의 네트워크로 이어집니다.</span>
-              <span className="block">어느 곳에서나 동일한 기준의 이비인후과 전문 진료를 만나보세요.</span>
+            <p className={`${trustSerif.className} mt-5 text-3xl md:text-[2.6rem] font-extrabold leading-snug tracking-tight break-keep`}>
+              더 가까이에서,<br />더 깊이 있는 진료
+            </p>
+            <p className="mt-4 max-w-xl mx-auto lg:mx-0 text-sm md:text-base text-primary-100/85 break-keep leading-relaxed">
+              전국 {clinicCount}개 하나이비인후과가 축적된 진료 경험과 의료 지식을 공유하며 우리 가족의 귀 코 목 건강을 함께 지킵니다.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
