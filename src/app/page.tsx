@@ -3,6 +3,7 @@ import Image from 'next/image';
 import prisma from '@/lib/prisma';
 import { parseSido, sortSido } from '@/lib/address';
 import { SITE_URL } from '@/lib/site';
+import { KOREA_PROVINCES, projectKorea } from '@/lib/korea-map';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,24 +51,15 @@ export default async function HomePage() {
     g.lat += c.lat; g.lon += c.lng; g.n += 1;
     sidoGeo.set(s, g);
   }
-  // 남한 고정 지리 범위(노드·실루엣 공통 투영)
-  const LON0 = 125.7, LON1 = 129.9, LAT0 = 33.9, LAT1 = 38.7, MAP_PAD = 5;
-  const proj = (lon: number, lat: number) => ({
-    x: Math.round((MAP_PAD + ((lon - LON0) / (LON1 - LON0)) * (100 - 2 * MAP_PAD)) * 10) / 10,
-    y: Math.round((MAP_PAD + ((LAT1 - lat) / (LAT1 - LAT0)) * (100 - 2 * MAP_PAD)) * 10) / 10, // 북쪽=위
+  // 가까이 붙는 지역은 라벨이 겹치지 않게 살짝 벌림(%)
+  const OFFSET: Record<string, [number, number]> = {
+    서울: [-3, -4.5], 경기: [4, 3], 부산: [1.5, 5], 경남: [-4.5, -1], 울산: [2.5, -3],
+  };
+  const NODES = [...sidoGeo.entries()].map(([label, g]) => {
+    const p = projectKorea(g.lon / g.n, g.lat / g.n);
+    const o = OFFSET[label] || [0, 0];
+    return { label, x: +(p.x + o[0]).toFixed(1), y: +(p.y + o[1]).toFixed(1) };
   });
-  const NODES = [...sidoGeo.entries()].map(([label, g]) => ({ label, ...proj(g.lon / g.n, g.lat / g.n) }));
-
-  // 남한 본토 간이 외곽선(경도,위도) → 폴리곤 좌표
-  const KOREA_LL: [number, number][] = [
-    [126.6, 37.8], [126.9, 38.0], [127.3, 38.3], [128.1, 38.35], [128.36, 38.62],
-    [129.0, 37.6], [129.43, 36.9], [129.56, 35.9], [129.36, 35.35], [129.1, 35.1],
-    [128.7, 34.95], [128.4, 34.85], [127.9, 34.78], [127.75, 34.55], [127.4, 34.62],
-    [127.1, 34.45], [126.7, 34.35], [126.38, 34.4], [126.35, 34.8], [126.5, 35.3],
-    [126.5, 35.9], [126.7, 36.2], [126.15, 36.8], [126.62, 36.95], [126.78, 37.25],
-    [126.42, 37.5], [126.6, 37.8],
-  ];
-  const koreaPoints = KOREA_LL.map(([lon, lat]) => { const p = proj(lon, lat); return `${p.x},${p.y}`; }).join(' ');
 
   const stats = [
     { value: clinicCount, unit: '개', label: '전국 병·의원' },
@@ -124,31 +116,37 @@ export default async function HomePage() {
 
           {/* 우: 한국 지도형 네트워크 비주얼 — 시/도를 실제 지리 위치에 배치, 클릭 시 이동 */}
           <div className="relative">
-            <div className="relative mx-auto w-[300px] h-[400px] sm:w-[360px] sm:h-[480px] md:w-[400px] md:h-[520px]">
-              {/* 한국 지도 실루엣 (장식, 클릭 통과) */}
+            <div className="relative mx-auto w-[300px] h-[406px] sm:w-[360px] sm:h-[487px] md:w-[400px] md:h-[541px]">
+              {/* 남한 시·도 지도 (실제 GeoJSON, 클릭 통과) */}
               <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <polygon points={koreaPoints}
-                  fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)"
-                  strokeWidth="0.6" strokeLinejoin="round" />
+                <defs>
+                  <linearGradient id="landFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stopColor="rgba(255,255,255,0.24)" />
+                    <stop offset="1" stopColor="rgba(255,255,255,0.09)" />
+                  </linearGradient>
+                  <filter id="landShadow" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="0" dy="0.5" stdDeviation="0.7" floodColor="rgba(2,10,40,0.5)" />
+                  </filter>
+                </defs>
+                <g filter="url(#landShadow)">
+                  {KOREA_PROVINCES.map(p => (
+                    <path key={p.name} d={p.d} fill="url(#landFill)"
+                      stroke="rgba(255,255,255,0.28)" strokeWidth="0.25" strokeLinejoin="round" />
+                  ))}
+                </g>
               </svg>
 
-              {/* 브랜드 배지 (우상단 동해 쪽, 장식) */}
-              <div className="pointer-events-none absolute right-0 top-0 z-10 rounded-2xl bg-white/95 px-3.5 py-2.5 text-center shadow-xl ring-1 ring-white/50">
-                <div className="text-2xl font-black leading-none text-primary-700">
-                  {clinicCount}<span className="align-top text-xs font-bold text-primary-500">개</span>
+              {/* 시/도 노드 (지리적 위치, 고정) */}
+              {NODES.map(n => (
+                <div key={n.label} className="absolute z-30"
+                  style={{ left: `${n.x}%`, top: `${n.y}%`, transform: 'translate(-50%, -50%)' }}>
+                  <Link href={`/clinics?sido=${encodeURIComponent(n.label)}`}
+                    aria-label={`${n.label} 병·의원 보기`}
+                    className="flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white/95 px-2.5 py-1 text-xs sm:text-sm font-bold text-primary-800 shadow-md ring-1 ring-black/5 hover:bg-white hover:scale-110 transition-transform">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary-500" />
+                    {n.label}
+                  </Link>
                 </div>
-                <div className="mt-0.5 text-[9px] font-extrabold tracking-widest text-primary-500">ONE NETWORK</div>
-              </div>
-
-              {/* 시/도 노드 (지리적 위치) */}
-              {NODES.map((n, i) => (
-                <Link key={n.label} href={`/clinics?sido=${encodeURIComponent(n.label)}`}
-                  aria-label={`${n.label} 병·의원 보기`}
-                  className={`${i % 2 === 0 ? 'node-float' : 'node-float-lg'} absolute z-30 flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white/20 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-lg ring-1 ring-white/30 backdrop-blur cursor-pointer hover:bg-white/35 hover:ring-white/70 transition-colors`}
-                  style={{ left: `${n.x}%`, top: `${n.y}%`, transform: 'translate(-50%, -50%)', animationDelay: `${(i % 5) * 0.5}s` }}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />
-                  {n.label}
-                </Link>
               ))}
             </div>
             <p className="mt-3 text-center text-sm text-primary-100/70">지역을 누르면 해당 지역 병·의원이 보입니다</p>
