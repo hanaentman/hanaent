@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Providers from '@/components/Providers';
 import { SITE_URL } from '@/lib/site';
+import prisma from '@/lib/prisma';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -27,12 +28,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // 본원(강남) 블로그 URL — 헤더 블로그 버튼에 사용
+  const hq = await prisma.clinic.findFirst({ where: { slug: 'gangdong' }, select: { blogUrl: true } }).catch(() => null);
+
   return (
     <html lang="ko">
       <body className="min-h-screen flex flex-col">
         <Providers>
-          <Header />
+          <Header blogUrl={hq?.blogUrl || ''} />
           <main className="flex-1">{children}</main>
           <Footer />
         </Providers>

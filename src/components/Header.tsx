@@ -4,10 +4,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import SearchBar from './SearchBar';
+import { externalUrl } from '@/lib/url';
 
-export default function Header() {
+export default function Header({ blogUrl = '' }: { blogUrl?: string }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const blogHref = externalUrl(blogUrl);
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -27,7 +29,15 @@ export default function Header() {
           </div>
 
           {/* 네비게이션 */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-5">
+            {blogHref && (
+              <a href={blogHref} target="_blank" rel="noopener noreferrer"
+                aria-label="파란코끼리세상 블로그"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2 py-1 hover:bg-gray-50 transition-colors">
+                <span className="rounded bg-[#03C75A] px-1.5 py-0.5 text-[11px] font-black leading-none text-white">blog</span>
+                <span className="hidden lg:inline text-sm font-semibold text-gray-700">파란코끼리세상</span>
+              </a>
+            )}
             <Link href="/clinics" className="text-gray-600 hover:text-primary-600 font-medium">
               가까운곳 찾기
             </Link>
@@ -37,7 +47,13 @@ export default function Header() {
           </nav>
 
           {/* 모바일 버튼 */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex items-center gap-1 md:hidden">
+            {blogHref && (
+              <a href={blogHref} target="_blank" rel="noopener noreferrer" aria-label="파란코끼리세상 블로그"
+                className="mr-1 rounded bg-[#03C75A] px-1.5 py-1 text-[11px] font-black leading-none text-white">
+                blog
+              </a>
+            )}
             <button
               onClick={() => setMobileSearchOpen(true)}
               className="p-2 text-gray-600 hover:text-primary-600"
@@ -62,6 +78,13 @@ export default function Header() {
         {/* 모바일 메뉴 */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t py-3">
+            {blogHref && (
+              <a href={blogHref} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 py-2" onClick={() => setMobileMenuOpen(false)}>
+                <span className="rounded bg-[#03C75A] px-1.5 py-0.5 text-[11px] font-black leading-none text-white">blog</span>
+                <span className="text-sm font-semibold text-gray-700">파란코끼리세상</span>
+              </a>
+            )}
             <Link href="/clinics" className="block py-2 text-gray-600 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
               가까운곳 찾기
             </Link>
