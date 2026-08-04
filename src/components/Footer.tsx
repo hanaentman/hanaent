@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-50 border-t border-gray-200 mt-auto">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="flex items-start gap-3">
             <Image
               src="/logo.jpg"
@@ -19,10 +19,6 @@ export default function Footer() {
               <p className="mt-1 text-gray-600 text-sm">
                 전국 병·의원에서 이비인후과 전문 진료를 제공합니다.
               </p>
-              <p className="mt-3 text-sm text-gray-600">
-                대표자: 김성준<br />
-                서울특별시 강남구 역삼로 247 홍진빌딩 3층
-              </p>
             </div>
           </div>
           <div>
@@ -31,12 +27,6 @@ export default function Footer() {
               <li><Link href="/clinics" className="hover:text-primary-600">가까운곳 찾기</Link></li>
               <li><Link href="/search" className="hover:text-primary-600">통합 검색</Link></li>
             </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-3">고객센터</h4>
-            <p className="text-sm text-gray-600">
-              대표전화: 070-7595-7894
-            </p>
           </div>
         </div>
         <div className="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
