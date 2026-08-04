@@ -96,7 +96,7 @@ export default async function HomePage() {
               더 가까이에서,<br />더 깊이 있는 진료
             </p>
             <p className="mt-4 max-w-xl mx-auto lg:mx-0 text-sm md:text-base text-primary-100/85 break-keep leading-relaxed">
-              전국 {clinicCount}개 하나이비인후과가 축적된 진료 경험과 의료 지식을 공유하며 우리 가족의 귀 코 목 건강을 함께 지킵니다.
+              전국 {clinicCount}개 하나이비인후과가 축적된 진료 경험과 의료 지식을 공유하며 우리 가족의 귀·코·목 건강을 함께 지킵니다.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
