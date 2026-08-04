@@ -41,16 +41,26 @@ export default async function HomePage() {
   const weekSeed = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
   const recentClinics = seededShuffle(allClinics, weekSeed).slice(0, 6);
 
-  // 3D 히어로 노드: 실제 시/도를 중앙 허브 둘레 원형으로 배치 (클릭 시 해당 시/도 목록으로 이동)
-  const NODES = sidoNames.map((label, i) => {
-    const angle = (i / sidoNames.length) * Math.PI * 2 - Math.PI / 2; // 12시 방향부터 시계방향
-    const R = 44; // 반지름(%)
-    return {
-      label,
-      x: Math.round((50 + R * Math.cos(angle)) * 10) / 10,
-      y: Math.round((50 + R * Math.sin(angle)) * 10) / 10,
-    };
-  });
+  // 히어로 지도 노드: 각 시/도를 실제 지리적 위치(병원 평균 좌표)로 배치
+  const sidoGeo = new Map<string, { lat: number; lon: number; n: number }>();
+  for (const c of allClinics) {
+    if (c.lat == null || c.lng == null) continue;
+    const s = parseSido(c.address);
+    const g = sidoGeo.get(s) || { lat: 0, lon: 0, n: 0 };
+    g.lat += c.lat; g.lon += c.lng; g.n += 1;
+    sidoGeo.set(s, g);
+  }
+  const pts = [...sidoGeo.entries()].map(([label, g]) => ({ label, lat: g.lat / g.n, lon: g.lon / g.n }));
+  const lats = pts.map(p => p.lat);
+  const lons = pts.map(p => p.lon);
+  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+  const minLon = Math.min(...lons), maxLon = Math.max(...lons);
+  const PAD = 12; // 가장자리 여백(%)
+  const NODES = pts.map(p => ({
+    label: p.label,
+    x: Math.round((PAD + ((p.lon - minLon) / ((maxLon - minLon) || 1)) * (100 - 2 * PAD)) * 10) / 10,
+    y: Math.round((PAD + ((maxLat - p.lat) / ((maxLat - minLat) || 1)) * (100 - 2 * PAD)) * 10) / 10, // 위도 반전(북쪽=위)
+  }));
 
   const stats = [
     { value: clinicCount, unit: '개', label: '전국 병·의원' },
@@ -105,42 +115,29 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* 우: 3D 네트워크 비주얼 */}
-          <div className="relative [perspective:1400px]">
-            <div className="relative mx-auto w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[440px] md:h-[440px] [transform-style:preserve-3d] [transform:rotateX(14deg)_rotateZ(-8deg)]">
-              {/* 회전 궤도 링 (장식 — 클릭 통과) */}
-              <div className="spin-slow pointer-events-none absolute inset-6 rounded-full border border-white/15" />
-              <div className="spin-slow pointer-events-none absolute inset-16 rounded-full border border-dashed border-white/15" style={{ animationDirection: 'reverse' }} />
-
-              {/* 연결선 (허브 → 노드, 클릭 통과) */}
-              <svg className="pointer-events-none absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                {NODES.map(n => (
-                  <line key={n.label} x1="50" y1="50" x2={n.x} y2={n.y}
-                    stroke="rgba(255,255,255,0.35)" strokeWidth="0.4" className="line-flow" />
-                ))}
-              </svg>
-
-              {/* 중앙 허브 */}
-              <div className="hub-pulse absolute left-1/2 top-1/2 z-20 flex h-28 w-28 sm:h-32 sm:w-32 flex-col items-center justify-center rounded-3xl bg-white text-primary-700 shadow-2xl shadow-primary-950/50 ring-4 ring-white/40"
-                style={{ transform: 'translate(-50%, -50%)' }}>
-                <span className="text-3xl sm:text-4xl font-black leading-none">{clinicCount}</span>
-                <span className="mt-1 text-[11px] font-bold tracking-wider text-primary-500">ONE NETWORK</span>
-                <span className="text-[11px] font-semibold text-gray-400">하나의 네트워크</span>
+          {/* 우: 한국 지도형 네트워크 비주얼 — 시/도를 실제 지리 위치에 배치, 클릭 시 이동 */}
+          <div className="relative">
+            <div className="relative mx-auto w-[300px] h-[320px] sm:w-[380px] sm:h-[405px] md:w-[440px] md:h-[470px]">
+              {/* 브랜드 배지 (좌상단, 장식) */}
+              <div className="pointer-events-none absolute left-1 top-1 z-10 rounded-2xl bg-white/95 px-4 py-3 text-center shadow-xl ring-1 ring-white/50">
+                <div className="text-3xl font-black leading-none text-primary-700">
+                  {clinicCount}<span className="align-top text-sm font-bold text-primary-500">개</span>
+                </div>
+                <div className="mt-1 text-[10px] font-extrabold tracking-widest text-primary-500">ONE NETWORK</div>
               </div>
 
-              {/* 시/도 노드 (클릭 시 해당 시·도 병·의원 목록으로 이동) */}
-              {NODES.map((n, i) => {
-                return (
-                  <Link key={n.label} href={`/clinics?sido=${encodeURIComponent(n.label)}`}
-                    aria-label={`${n.label} 병·의원 보기`}
-                    className={`${i % 2 === 0 ? 'node-float' : 'node-float-lg'} absolute z-30 flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white/15 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-lg ring-1 ring-white/25 backdrop-blur cursor-pointer hover:bg-white/30 hover:ring-white/60 transition-colors`}
-                    style={{ left: `${n.x}%`, top: `${n.y}%`, transform: 'translate(-50%, -50%)', animationDelay: `${(i % 5) * 0.5}s` }}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />
-                    {n.label}
-                  </Link>
-                );
-              })}
+              {/* 시/도 노드 (지리적 위치) */}
+              {NODES.map((n, i) => (
+                <Link key={n.label} href={`/clinics?sido=${encodeURIComponent(n.label)}`}
+                  aria-label={`${n.label} 병·의원 보기`}
+                  className={`${i % 2 === 0 ? 'node-float' : 'node-float-lg'} absolute z-30 flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white/20 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-lg ring-1 ring-white/30 backdrop-blur cursor-pointer hover:bg-white/35 hover:ring-white/70 transition-colors`}
+                  style={{ left: `${n.x}%`, top: `${n.y}%`, transform: 'translate(-50%, -50%)', animationDelay: `${(i % 5) * 0.5}s` }}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />
+                  {n.label}
+                </Link>
+              ))}
             </div>
+            <p className="mt-3 text-center text-sm text-primary-100/70">지역을 누르면 해당 지역 병·의원이 보입니다</p>
           </div>
         </div>
 
