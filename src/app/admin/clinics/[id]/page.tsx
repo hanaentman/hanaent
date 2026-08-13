@@ -16,11 +16,11 @@ export default async function EditClinicPage({ params }: PageProps) {
   if (!user) redirect('/admin/login');
   if (!isSuperAdmin(user)) redirect('/admin/clinic');
 
-  // "new" 지점 생성
+  // "new" 병·의원 생성
   if (params.id === 'new') {
     return (
       <AdminLayoutWrapper>
-        <h1 className="text-2xl font-bold mb-6">새 지점 추가</h1>
+        <h1 className="text-2xl font-bold mb-6">새 병·의원 추가</h1>
         <div className="card p-6">
           <ClinicEditForm clinic={null} />
         </div>
@@ -59,8 +59,8 @@ export default async function EditClinicPage({ params }: PageProps) {
         </section>
 
         <section className="card p-6 border-red-200">
-          <h2 className="text-lg font-bold mb-1 text-red-600">지점 삭제</h2>
-          <p className="text-sm text-gray-500 mb-4">삭제하면 이 지점과 소속 의료진·사진이 모두 삭제되며 되돌릴 수 없습니다.</p>
+          <h2 className="text-lg font-bold mb-1 text-red-600">병·의원 삭제</h2>
+          <p className="text-sm text-gray-500 mb-4">삭제하면 이 병·의원과 소속 의료진·사진이 모두 삭제되며 되돌릴 수 없습니다.</p>
           <ClinicDeleteButton id={clinic.id} name={clinic.name} />
         </section>
       </div>

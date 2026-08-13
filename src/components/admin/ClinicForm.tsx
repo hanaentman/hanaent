@@ -102,7 +102,7 @@ export default function ClinicEditForm({ clinic, canEditSortOrder = false }: { c
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">지점명 *</label>
+          <label className="block text-sm font-medium mb-1">병·의원명 *</label>
           <input className="input-field" value={form.name} onChange={e => update('name', e.target.value)} required />
         </div>
         {isNew && (
@@ -173,12 +173,12 @@ export default function ClinicEditForm({ clinic, canEditSortOrder = false }: { c
         <div>
           <label className="block text-sm font-medium mb-1">공식 홈페이지 링크</label>
           <input className="input-field" value={form.websiteUrl} onChange={e => update('websiteUrl', e.target.value)} placeholder="https://example.com" />
-          <p className="text-xs text-gray-400 mt-1">지점 홈페이지 주소 (입력 시 지점 카드·상세에 '홈페이지' 버튼 표시)</p>
+          <p className="text-xs text-gray-400 mt-1">병·의원 홈페이지 주소 (입력 시 병·의원 카드·상세에 '홈페이지' 버튼 표시)</p>
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">블로그 링크</label>
           <input className="input-field" value={form.blogUrl} onChange={e => update('blogUrl', e.target.value)} placeholder="https://blog.naver.com/..." />
-          <p className="text-xs text-gray-400 mt-1">지점 블로그 주소 (입력 시 '블로그' 버튼 표시)</p>
+          <p className="text-xs text-gray-400 mt-1">병·의원 블로그 주소 (입력 시 '블로그' 버튼 표시)</p>
         </div>
       </div>
 
@@ -192,7 +192,7 @@ export default function ClinicEditForm({ clinic, canEditSortOrder = false }: { c
 
       <div className="flex justify-end">
         <button type="submit" disabled={loading} className="btn-primary">
-          {loading ? '저장 중...' : isNew ? '지점 추가' : '변경사항 저장'}
+          {loading ? '저장 중...' : isNew ? '병·의원 추가' : '변경사항 저장'}
         </button>
       </div>
     </form>

@@ -19,8 +19,8 @@ export default async function ClinicsManagePage() {
   return (
     <AdminLayoutWrapper>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">지점 관리</h1>
-        <Link href="/admin/clinics/new" className="btn-primary">새 지점 추가</Link>
+        <h1 className="text-2xl font-bold">네트워크 관리</h1>
+        <Link href="/admin/clinics/new" className="btn-primary">새 병·의원 추가</Link>
       </div>
 
       <div className="card overflow-hidden">
@@ -28,7 +28,7 @@ export default async function ClinicsManagePage() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b">
               <tr>
-                <th className="text-left p-3 font-medium">지점명</th>
+                <th className="text-left p-3 font-medium">병·의원명</th>
                 <th className="text-left p-3 font-medium">지역</th>
                 <th className="text-left p-3 font-medium hidden md:table-cell">전화번호</th>
                 <th className="text-center p-3 font-medium">의료진</th>

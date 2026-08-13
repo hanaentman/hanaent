@@ -27,7 +27,7 @@ export default async function SuperAdminDashboard() {
       {/* 통계 카드 */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="card p-6">
-          <p className="text-sm text-gray-500">전체 지점</p>
+          <p className="text-sm text-gray-500">전체 병·의원</p>
           <p className="text-3xl font-bold text-primary-600">{clinicCount}</p>
         </div>
         <div className="card p-6">
@@ -42,14 +42,14 @@ export default async function SuperAdminDashboard() {
 
       {/* 빠른 작업 */}
       <div className="flex gap-3 mb-8">
-        <Link href="/admin/clinics" className="btn-primary">지점 관리</Link>
+        <Link href="/admin/clinics" className="btn-primary">네트워크 관리</Link>
         <Link href="/admin/users" className="btn-secondary">계정 관리</Link>
       </div>
 
-      {/* 최근 수정 지점 */}
+      {/* 최근 수정 병·의원 */}
       <div className="card">
         <div className="p-4 border-b">
-          <h2 className="font-bold">최근 수정된 지점</h2>
+          <h2 className="font-bold">최근 수정된 병·의원</h2>
         </div>
         <div className="divide-y">
           {recentClinics.map(clinic => (

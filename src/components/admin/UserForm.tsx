@@ -49,7 +49,7 @@ export default function UserManager({ users, clinics, currentUserId }: { users: 
               <tr>
                 <th className="text-left p-3 font-medium">아이디</th>
                 <th className="text-left p-3 font-medium">역할</th>
-                <th className="text-left p-3 font-medium hidden md:table-cell">소속 지점</th>
+                <th className="text-left p-3 font-medium hidden md:table-cell">소속 병·의원</th>
                 <th className="text-center p-3 font-medium">상태</th>
                 <th className="text-center p-3 font-medium hidden md:table-cell">마지막 로그인</th>
                 <th className="text-right p-3 font-medium">작업</th>
@@ -61,7 +61,7 @@ export default function UserManager({ users, clinics, currentUserId }: { users: 
                   <td className="p-3 font-medium">{u.username}</td>
                   <td className="p-3">
                     <span className={`text-xs px-2 py-1 rounded-full ${u.role === 'SUPER_ADMIN' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
-                      {u.role === 'SUPER_ADMIN' ? '전체 관리자' : '지점 관리자'}
+                      {u.role === 'SUPER_ADMIN' ? '전체 관리자' : '병·의원 관리자'}
                     </span>
                   </td>
                   <td className="p-3 text-gray-500 hidden md:table-cell">{u.clinic?.name || '-'}</td>
@@ -184,15 +184,15 @@ function UserCreateForm({
         <div>
           <label className="block text-sm font-medium mb-1">역할 *</label>
           <select className="input-field" value={form.role} onChange={e => setForm(p => ({ ...p, role: e.target.value as any }))}>
-            <option value="CLINIC_ADMIN">지점 관리자</option>
+            <option value="CLINIC_ADMIN">병·의원 관리자</option>
             <option value="SUPER_ADMIN">전체 관리자</option>
           </select>
         </div>
         {form.role === 'CLINIC_ADMIN' && (
           <div>
-            <label className="block text-sm font-medium mb-1">소속 지점 *</label>
+            <label className="block text-sm font-medium mb-1">소속 병·의원 *</label>
             <select className="input-field" value={form.clinicId} onChange={e => setForm(p => ({ ...p, clinicId: e.target.value }))} required>
-              <option value="">지점 선택</option>
+              <option value="">병·의원 선택</option>
               {clinics.map(c => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}

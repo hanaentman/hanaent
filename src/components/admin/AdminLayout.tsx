@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { href: '/admin/users', label: '계정 관리', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
       ]
     : [
-        { href: '/admin/clinic', label: '지점 편집', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' },
+        { href: '/admin/clinic', label: '병·의원 편집', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' },
       ];
 
   return (
@@ -37,7 +37,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div>
               <p className="font-bold text-sm">{user?.username || '관리자'}</p>
               <p className="text-xs text-gray-400">
-                {isSuperAdmin ? '전체 관리자' : '지점 관리자'}
+                {isSuperAdmin ? '전체 관리자' : '병·의원 관리자'}
               </p>
             </div>
             <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-400 hover:text-white">
