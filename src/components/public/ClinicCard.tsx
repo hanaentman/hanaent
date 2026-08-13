@@ -25,10 +25,7 @@ export default function ClinicCard({
       <Link href={`/clinics/${slug}`} className="group block">
         <div className="relative h-36 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
           {heroImage ? (
-            <>
-              <Image src={heroImage} alt="" aria-hidden fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover scale-110 blur-xl" />
-              <Image src={heroImage} alt={name} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-contain" />
-            </>
+            <Image src={heroImage} alt={name} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-300" />
           ) : (
             <span className="text-4xl font-black text-primary-200">H</span>
           )}
