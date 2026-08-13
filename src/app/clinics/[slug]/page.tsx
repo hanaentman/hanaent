@@ -5,6 +5,8 @@ import Image from 'next/image';
 import DoctorCard from '@/components/public/DoctorCard';
 import { externalUrl } from '@/lib/url';
 import { getSetting, SETTING_DETAIL_BANNER } from '@/lib/settings';
+import { headers } from 'next/headers';
+import { isBot, bumpCounters, dayKey } from '@/lib/stats';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,6 +39,15 @@ export default async function ClinicDetailPage({ params }: PageProps) {
   });
 
   if (!clinic) notFound();
+
+  // 조회수 집계 (봇 제외)
+  const ua = headers().get('user-agent');
+  if (!isBot(ua)) {
+    await Promise.all([
+      prisma.clinic.update({ where: { id: clinic.id }, data: { viewCount: { increment: 1 } } }).catch(() => {}),
+      bumpCounters(['view:clinic', dayKey()]),
+    ]);
+  }
 
   // 진료시간: JSON 객체면 항목별로, 아니면 자유 텍스트를 그대로 표시
   const hoursRaw = (clinic.hours || '').trim();

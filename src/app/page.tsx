@@ -8,6 +8,8 @@ const trustSerif = Nanum_Myeongjo({ subsets: ['latin'], weight: ['700', '800'], 
 import { parseSido, sortSido } from '@/lib/address';
 import { SITE_URL } from '@/lib/site';
 import { KOREA_PROVINCES, projectKorea } from '@/lib/korea-map';
+import { headers } from 'next/headers';
+import { isBot, bumpCounters, dayKey } from '@/lib/stats';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,6 +31,10 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
 }
 
 export default async function HomePage() {
+  // 조회수 집계 (봇 제외)
+  const ua = headers().get('user-agent');
+  if (!isBot(ua)) await bumpCounters(['view:home', dayKey()]);
+
   const allClinics = await prisma.clinic.findMany({
     include: {
       images: { where: { type: 'HERO' }, take: 1 },

@@ -17,7 +17,7 @@ export default withAuth(
     }
 
     // CLINIC_ADMIN이 SUPER_ADMIN 전용 페이지 접근 차단
-    const superAdminPaths = ['/admin/clinics', '/admin/users', '/admin/logs'];
+    const superAdminPaths = ['/admin/clinics', '/admin/users', '/admin/logs', '/admin/stats'];
     if (token.role === 'CLINIC_ADMIN') {
       for (const path of superAdminPaths) {
         if (pathname.startsWith(path)) {
