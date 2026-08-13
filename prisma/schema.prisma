@@ -8,6 +8,13 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// 사이트 전역 설정(키-값) — 예: 상세 페이지 공통 상단 배너
+model SiteSetting {
+  key       String   @id
+  value     String   @default("")
+  updatedAt DateTime @updatedAt
+}
+
 model Clinic {
   id        String   @id @default(cuid())
   slug      String   @unique

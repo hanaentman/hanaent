@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import { getSessionUser, isSuperAdmin } from '@/lib/rbac';
 import prisma from '@/lib/prisma';
 import AdminLayoutWrapper from '@/components/admin/AdminLayout';
+import BannerManager from '@/components/admin/BannerManager';
+import { getSetting, SETTING_DETAIL_BANNER } from '@/lib/settings';
 import Link from 'next/link';
 
 export default async function SuperAdminDashboard() {
@@ -9,7 +11,7 @@ export default async function SuperAdminDashboard() {
   if (!user) redirect('/admin/login');
   if (!isSuperAdmin(user)) redirect('/admin/clinic');
 
-  const [clinicCount, doctorCount, adminCount, recentClinics] = await Promise.all([
+  const [clinicCount, doctorCount, adminCount, recentClinics, detailBanner] = await Promise.all([
     prisma.clinic.count(),
     prisma.doctor.count(),
     prisma.adminUser.count(),
@@ -18,11 +20,19 @@ export default async function SuperAdminDashboard() {
       orderBy: { updatedAt: 'desc' },
       include: { _count: { select: { doctors: true, images: true } } },
     }),
+    getSetting(SETTING_DETAIL_BANNER),
   ]);
 
   return (
     <AdminLayoutWrapper>
       <h1 className="text-2xl font-bold mb-6">대시보드</h1>
+
+      {/* 상세 페이지 공통 상단 배너 */}
+      <div className="card p-6 mb-8">
+        <h2 className="text-lg font-bold mb-1">상세 페이지 상단 배너 (전체 병원 공통)</h2>
+        <p className="text-sm text-gray-500 mb-4">모든 병원 상세 페이지 상단에 공통으로 표시할 배너 이미지입니다.</p>
+        <BannerManager currentUrl={detailBanner} />
+      </div>
 
       {/* 통계 카드 */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">

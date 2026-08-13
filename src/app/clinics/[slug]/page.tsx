@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import Image from 'next/image';
 import DoctorCard from '@/components/public/DoctorCard';
 import { externalUrl } from '@/lib/url';
+import { getSetting, SETTING_DETAIL_BANNER } from '@/lib/settings';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,13 +53,16 @@ export default async function ClinicDetailPage({ params }: PageProps) {
 
   const heroImage = clinic.images.find(img => img.type === 'HERO');
   const galleryImages = clinic.images.filter(img => img.type === 'GALLERY');
+  // 공통 상단 배너(설정 시 모든 병원 공통) 우선, 없으면 각 병원 자체 사진
+  const detailBanner = await getSetting(SETTING_DETAIL_BANNER);
+  const heroSrc = detailBanner || heroImage?.url || '';
 
   return (
     <div>
       {/* 히어로 */}
       <div className="h-64 md:h-80 bg-gradient-to-br from-primary-600 to-primary-800 relative overflow-hidden">
-        {heroImage ? (
-          <Image src={heroImage.url} alt={clinic.name} fill priority sizes="100vw" className="object-cover opacity-80" />
+        {heroSrc ? (
+          <Image src={heroSrc} alt={clinic.name} fill priority sizes="100vw" className="object-cover opacity-80" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-8xl font-bold text-white/20">H</span>
