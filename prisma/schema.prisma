@@ -8,6 +8,19 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// 관리자 접속(로그인) 로그 — 마스터(전체 관리자)만 조회
+model AccessLog {
+  id        String   @id @default(cuid())
+  username  String
+  role      String   @default("")
+  action    String   @default("login") // login | login_fail
+  ip        String   @default("")
+  userAgent String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
 // 사이트 전역 설정(키-값) — 예: 상세 페이지 공통 상단 배너
 model SiteSetting {
   key       String   @id

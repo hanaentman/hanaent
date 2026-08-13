@@ -11,22 +11,34 @@ export const authOptions: NextAuthOptions = {
         username: { label: '아이디', type: 'text' },
         password: { label: '비밀번호', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
+        const ip = (req?.headers?.['x-forwarded-for'] as string || '').split(',')[0].trim();
+        const userAgent = ((req?.headers?.['user-agent'] as string) || '').slice(0, 300);
+        const log = (username: string, role: string, action: string) =>
+          prisma.accessLog.create({ data: { username, role, action, ip, userAgent } }).catch(() => {});
+
         if (!credentials?.username || !credentials?.password) return null;
 
         const user = await prisma.adminUser.findUnique({
           where: { username: credentials.username },
         });
 
-        if (!user || !user.isActive) return null;
+        if (!user || !user.isActive) {
+          if (user) await log(user.username, user.role, 'login_fail');
+          return null;
+        }
 
         const isValid = await bcrypt.compare(credentials.password, user.passwordHash);
-        if (!isValid) return null;
+        if (!isValid) {
+          await log(user.username, user.role, 'login_fail');
+          return null;
+        }
 
         await prisma.adminUser.update({
           where: { id: user.id },
           data: { lastLoginAt: new Date() },
         });
+        await log(user.username, user.role, 'login');
 
         return {
           id: user.id,
