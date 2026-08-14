@@ -71,6 +71,9 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
     return true;
   });
 
+  // 본원(하나이비인후과병원(본원))은 항상 맨 뒤로 (안정 정렬 — 나머지 순서 유지)
+  clinics.sort((a, b) => (a.name.includes('(본원)') ? 1 : 0) - (b.name.includes('(본원)') ? 1 : 0));
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-6">
