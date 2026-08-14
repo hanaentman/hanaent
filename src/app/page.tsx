@@ -13,6 +13,9 @@ import { isBot, bumpCounters, dayKey } from '@/lib/stats';
 
 export const dynamic = 'force-dynamic';
 
+// 메인 하단 '병·의원 안내' 섹션 표시 여부 — 나중에 다시 쓰려면 true 로 변경
+const SHOW_CLINIC_SECTION = false;
+
 // 시드 기반 결정적 셔플(Fisher-Yates + mulberry32) — 같은 시드면 항상 같은 순서
 function seededShuffle<T>(arr: T[], seed: number): T[] {
   let a = seed >>> 0;
@@ -217,7 +220,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ===== 병·의원 안내 ===== */}
+      {/* ===== 병·의원 안내 (현재 숨김 — 위 SHOW_CLINIC_SECTION 으로 켜고 끔) ===== */}
+      {SHOW_CLINIC_SECTION && (
       <section className="bg-gray-50 py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-end justify-between mb-8">
@@ -270,6 +274,7 @@ export default async function HomePage() {
           )}
         </div>
       </section>
+      )}
 
       {/* 구조화 데이터 */}
       <script
